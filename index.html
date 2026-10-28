@@ -102,6 +102,9 @@ p { margin: 0; }
   transition: opacity .4s ease, visibility .4s;
 }
 #boot.done { opacity: 0; visibility: hidden; }
+/* Filet de sécurité : si le script ne tourne pas, l'écran de boot disparaît quand même. */
+#boot { animation: boot-failsafe 0s linear 10s forwards; }
+@keyframes boot-failsafe { to { opacity: 0; visibility: hidden; } }
 #boot pre {
   margin: 0; width: 100%; max-width: 560px;
   white-space: pre-wrap; font: inherit; font-size: clamp(0.82rem, 3.2vw, 1rem); line-height: 1.7;
@@ -154,19 +157,28 @@ p { margin: 0; }
   background: linear-gradient(90deg, rgba(10,6,18,0.82) 0%, rgba(10,6,18,0.55) 45%, rgba(10,6,18,0) 75%);
 }
 #skyline { position: absolute; left: 0; right: 0; bottom: 33%; width: 100%; height: 42%; display: block; }
-.floor {
-  position: absolute; left: -50%; right: -50%; bottom: 0; height: 34%;
-  background-image:
-    linear-gradient(rgba(5,217,232,0.55) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(5,217,232,0.55) 1px, transparent 1px);
-  background-size: 48px 48px;
-  transform: perspective(260px) rotateX(58deg);
-  transform-origin: 50% 0;
-  animation: floor 1.8s linear infinite;
-  mask-image: linear-gradient(to bottom, transparent, #000 30%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 30%);
+/* Sol quadrillé : couche fixe derrière toute la page */
+.grid-floor {
+  position: fixed; left: 0; right: 0; bottom: 0; height: 42vh; z-index: 0; pointer-events: none; overflow: hidden;
+  opacity: .42;
+  mask-image: linear-gradient(to bottom, transparent, #000 35%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 35%);
 }
-@keyframes floor { to { background-position: 0 48px; } }
+.grid-floor::before {
+  content: ""; position: absolute; left: -50%; right: -50%; top: 0; height: 100%;
+  background-image:
+    linear-gradient(rgba(5,217,232,0.6) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(5,217,232,0.6) 1px, transparent 1px);
+  background-size: 48px 48px;
+  transform-origin: 50% 0;
+  transform: perspective(260px) rotateX(58deg);
+  animation: grid-run 1.8s linear infinite;
+}
+@keyframes grid-run {
+  from { transform: perspective(260px) rotateX(58deg) translateY(-48px); }
+  to { transform: perspective(260px) rotateX(58deg) translateY(0); }
+}
+main, footer { position: relative; z-index: 1; }
 .hero .wrap { position: relative; padding-block: clamp(40px, 9vw, 96px) clamp(140px, 26vw, 240px); }
 .eyebrow {
   font-family: var(--f-mono); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--cyan);
@@ -182,19 +194,33 @@ p { margin: 0; }
   font-family: var(--f-display); font-weight: 900; font-size: clamp(3.4rem, 17vw, 8.6rem); line-height: 1.05; letter-spacing: .02em;
   color: #fff4fa;
   text-shadow: 0 0 4px #fff, 0 0 12px var(--magenta), 0 0 28px var(--magenta), 0 0 60px rgba(255,42,109,0.7);
-  animation: neon-on 2.2s ease-out .2s both;
 }
+.ready .hero h1 .num { animation: neon-on 2.2s ease-out .1s both; }
 @keyframes neon-on {
   0% { opacity: .1; text-shadow: none; } 8% { opacity: 1; } 10% { opacity: .2; } 14% { opacity: 1; }
   18% { opacity: .4; text-shadow: none; } 26% { opacity: 1; } 100% { opacity: 1; }
 }
+.glitch { position: relative; animation: glitch-skew 5s infinite steps(1) var(--gd, 0s); }
 .glitch::before, .glitch::after {
   content: attr(data-text); position: absolute; inset: 0; pointer-events: none;
 }
-.glitch::before { color: var(--cyan); transform: translate(-3px, 0); clip-path: inset(0 0 100% 0); animation: glitch-a 5s infinite steps(1); mix-blend-mode: screen; }
-.glitch::after { color: var(--magenta); transform: translate(3px, 0); clip-path: inset(100% 0 0 0); animation: glitch-b 5s infinite steps(1); mix-blend-mode: screen; }
-@keyframes glitch-a { 0%, 88%, 100% { clip-path: inset(0 0 100% 0); } 89% { clip-path: inset(10% 0 60% 0); } 91% { clip-path: inset(55% 0 20% 0); } 93% { clip-path: inset(30% 0 45% 0); } }
-@keyframes glitch-b { 0%, 88%, 100% { clip-path: inset(100% 0 0 0); } 90% { clip-path: inset(65% 0 10% 0); } 92% { clip-path: inset(15% 0 70% 0); } 94% { clip-path: inset(40% 0 35% 0); } }
+.glitch::before { color: var(--cyan); transform: translate(-3px, 0); clip-path: inset(0 0 100% 0); animation: glitch-a 5s infinite steps(1) var(--gd, 0s); mix-blend-mode: screen; }
+.glitch::after { color: var(--magenta); transform: translate(3px, 0); clip-path: inset(100% 0 0 0); animation: glitch-b 5s infinite steps(1) var(--gd, 0s); mix-blend-mode: screen; }
+/* Fenêtre de glitch : de 84 % à 100 % du cycle de 5 s, soit 0,8 s */
+@keyframes glitch-a {
+  0%, 83%, 91% { clip-path: inset(0 0 100% 0); }
+  84% { clip-path: inset(10% 0 60% 0); } 86.5% { clip-path: inset(55% 0 20% 0); } 89% { clip-path: inset(30% 0 45% 0); }
+  93% { clip-path: inset(70% 0 5% 0); } 95.5% { clip-path: inset(5% 0 80% 0); } 98% { clip-path: inset(40% 0 40% 0); }
+}
+@keyframes glitch-b {
+  0%, 84%, 92% { clip-path: inset(100% 0 0 0); }
+  85% { clip-path: inset(65% 0 10% 0); } 87.5% { clip-path: inset(15% 0 70% 0); } 90% { clip-path: inset(40% 0 35% 0); }
+  94% { clip-path: inset(20% 0 55% 0); } 96.5% { clip-path: inset(75% 0 8% 0); } 99% { clip-path: inset(35% 0 50% 0); }
+}
+@keyframes glitch-skew {
+  0%, 83%, 86%, 93%, 96% { transform: none; }
+  84% { transform: skewX(-6deg) translateX(2px); } 94% { transform: skewX(4deg) translateX(-2px); }
+}
 
 .hero-lede { margin-top: 22px; max-width: 34ch; font-size: var(--step-1); line-height: 1.4; color: var(--text); }
 .hero-lede strong { color: var(--yellow); font-weight: 600; }
@@ -250,8 +276,9 @@ p { margin: 0; }
 section.block { padding-block: clamp(56px, 9vw, 96px); border-bottom: 1px solid var(--line); }
 .sec-head { display: grid; gap: 10px; margin-bottom: 32px; }
 .sec-tag { font-family: var(--f-mono); font-size: .78rem; letter-spacing: .18em; color: var(--magenta); text-transform: uppercase; }
+.sec-head h2.glitch { width: fit-content; max-width: 100%; }
 .sec-head h2 { font-family: var(--f-head); font-weight: 700; font-size: var(--step-3); text-transform: uppercase; letter-spacing: .05em; line-height: 1.05; }
-.sec-head p { color: var(--dim); max-width: 62ch; }
+.sec-head p { color: var(--dim); text-shadow: 0 1px 2px var(--void), 0 0 12px var(--void); }
 
 /* Panneau HUD : filet + crochets aux coins */
 .hud { position: relative; background: var(--panel); border: 1px solid var(--line); padding: 22px; }
@@ -269,7 +296,7 @@ section.block { padding-block: clamp(56px, 9vw, 96px); border-bottom: 1px solid 
 .kw { color: var(--yellow); }
 .transmission .hook { font-family: var(--f-head); font-weight: 700; font-size: var(--step-1); letter-spacing: .06em; text-transform: uppercase; color: var(--magenta); }
 .motto { font-family: var(--f-mono); font-size: .85rem; color: var(--magenta); letter-spacing: .04em; }
-.glossary { font-family: var(--f-mono); font-size: .85rem; color: var(--dim); border-left: 2px solid var(--yellow); padding: 4px 0 4px 12px; max-width: 62ch; }
+.glossary { font-family: var(--f-mono); font-size: .85rem; color: var(--dim); border-left: 2px solid var(--yellow); padding: 4px 0 4px 12px; text-shadow: 0 1px 2px var(--void), 0 0 12px var(--void); }
 .transmission .sign { font-family: var(--f-mono); color: var(--magenta); }
 .directives { display: grid; gap: 14px; }
 .directives h3 { font-family: var(--f-mono); font-weight: 400; font-size: .8rem; letter-spacing: .16em; color: var(--yellow); text-transform: uppercase; }
@@ -440,7 +467,7 @@ form#enrol { display: grid; gap: 16px; }
   font-family: var(--f-mono); font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; padding: 8px 12px; min-height: 38px;
 }
 .filter[aria-pressed="true"] { border-color: var(--magenta); color: var(--text); background: rgba(255,42,109,0.12); }
-.search { flex: 1; min-width: 0; }
+.search { flex: 1 1 220px; min-width: 0; }
 .search input {
   width: 100%; min-height: 38px; padding: 8px 12px; background: var(--void); color: var(--text);
   border: 1px solid var(--line); font-family: var(--f-mono); font-size: .9rem; border-radius: 0;
@@ -502,6 +529,7 @@ footer b { color: var(--magenta); font-weight: 400; }
 @media (min-width: 721px) { .mobile-cta { display: none; } }
 
 @media (prefers-reduced-motion: reduce) {
+  #boot { display: none !important; }
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .glitch::before, .glitch::after { display: none; }
 }
@@ -510,7 +538,9 @@ footer b { color: var(--magenta); font-weight: 400; }
 <body>
 
 <!-- ===================== ÉCRAN DE BOOT ===================== -->
-<div id="boot" role="presentation" hidden>
+<div class="grid-floor" aria-hidden="true"></div>
+
+<div id="boot" role="presentation">
   <pre id="boot-text"></pre>
   <div class="skip">[ TOUCHER POUR PASSER ]</div>
 </div>
@@ -539,7 +569,6 @@ footer b { color: var(--magenta); font-weight: 400; }
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero-bg" aria-hidden="true">
       <canvas id="skyline"></canvas>
-      <div class="floor"></div>
     </div>
     <div class="wrap">
       <p class="eyebrow"><span class="red">■</span> Transmission cryptée // Néo-Paris, secteur 11</p>
@@ -560,10 +589,6 @@ footer b { color: var(--magenta); font-weight: 400; }
         <div class="cd-cell"><b id="cd-s">--</b><small>sec</small></div>
       </div>
       <p class="cd-status" id="cd-status">Avant le jack-in du Run 01</p>
-      <div class="cta-row">
-        <a class="btn btn-primary" href="#enrolement">Accepter le contrat</a>
-        <a class="btn btn-ghost" href="#programme">Voir le programme</a>
-      </div>
     </div>
   </section>
 
@@ -572,7 +597,7 @@ footer b { color: var(--magenta); font-weight: 400; }
     <div class="wrap">
       <div class="sec-head">
         <p class="sec-tag">// Message entrant</p>
-        <h2 id="briefing-title">Briefing de mission</h2>
+        <h2 id="briefing-title" class="glitch" data-text="Briefing de mission" style="--gd:-0.6s">Briefing de mission</h2>
       </div>
       <div class="briefing">
         <div class="hud transmission">
@@ -602,7 +627,7 @@ footer b { color: var(--magenta); font-weight: 400; }
     <div class="wrap">
       <div class="sec-head">
         <p class="sec-tag">// Déroulé des opérations</p>
-        <h2 id="programme-title">Programme</h2>
+        <h2 id="programme-title" class="glitch" data-text="Programme" style="--gd:-2.1s">Programme</h2>
         <p>Samedi 9 janvier 2027, trois <span class="kw">runs</span> dans le 11e : viens à un, deux ou aux trois. Chacun règle ses <span class="kw">eddies</span> (sa part) sur place.</p>
       </div>
       <div class="timeline" id="timeline"></div>
@@ -614,7 +639,7 @@ footer b { color: var(--magenta); font-weight: 400; }
     <div class="wrap">
       <div class="sec-head">
         <p class="sec-tag">// Protocole visuel</p>
-        <h2 id="dress-title">Dress code</h2>
+        <h2 id="dress-title" class="glitch" data-text="Dress code" style="--gd:-3.4s">Dress code</h2>
         <p>Rétro-futurisme, néons, cuir, métal et circuits imprimés. Pas besoin de budget : il faut juste jouer le jeu.</p>
         <p class="glossary">Dans l'univers cyberpunk, le corps est une enveloppe (un <span class="kw">sleeve</span>, un <span class="kw">shell</span>) qu'on améliore à coups d'implants, le <span class="kw">chrome</span>. Ici, ton chrome, c'est ton déguisement.</p>
       </div>
@@ -682,7 +707,7 @@ footer b { color: var(--magenta); font-weight: 400; }
     <div class="wrap">
       <div class="sec-head">
         <p class="sec-tag">// Inscription</p>
-        <h2 id="enrol-title">Accepter le contrat</h2>
+        <h2 id="enrol-title" class="glitch" data-text="Accepter le contrat" style="--gd:-1.2s">Accepter le contrat</h2>
         <p>Inscris-toi, ajoute ton <span class="kw">escouade</span> (les personnes qui viennent avec toi) et coche les <span class="kw">runs</span> de chacun. Modifiable à tout moment, depuis n'importe quel appareil, via le registre.</p>
       </div>
 
@@ -731,7 +756,7 @@ footer b { color: var(--magenta); font-weight: 400; }
     <div class="wrap">
       <div class="sec-head">
         <p class="sec-tag">// Base de données du Réseau</p>
-        <h2 id="reg-title">Registre des runners</h2>
+        <h2 id="reg-title" class="glitch" data-text="Registre des runners" style="--gd:-4.3s">Registre des runners</h2>
         <p>Qui vient, et à quoi. Pour modifier une inscription faite sur un autre appareil, retrouve ton nom ici et touche « Modifier ».</p>
       </div>
       <div class="stats" id="stats"></div>
@@ -754,7 +779,7 @@ footer b { color: var(--magenta); font-weight: 400; }
     <div class="wrap">
       <div class="sec-head">
         <p class="sec-tag">// Requêtes fréquentes</p>
-        <h2 id="faq-title">FAQ</h2>
+        <h2 id="faq-title" class="glitch" data-text="FAQ" style="--gd:-2.8s">FAQ</h2>
       </div>
       <div class="faq">
         <details>
@@ -853,8 +878,8 @@ const CONFIG = {
       kind: "Bar + DJ set",
       venue: "La Morézienne",
       address: "13 rue Marguerite Moret, 75011 Paris",
-      status: "wait",
-      statusLabel: "À confirmer",
+      status: "ok",
+      statusLabel: "Lieu confirmé",
       desc: "Néons, DJ set et tournées jusqu'à extinction des feux. Ton [[fixer]] arrose une partie des consos. Remise du prix du meilleur [[chrome]]."
     }
   ],
@@ -977,8 +1002,7 @@ const displayName = (m) => `${m.prenom} ${m.nom}`.trim();
    ===================================================================== */
 function runBoot() {
   const boot = $("#boot");
-  if (reducedMotion || store.get("c3030-booted", false)) return;
-  boot.hidden = false;
+  if (reducedMotion) { boot.hidden = true; document.body.classList.add("ready"); return; }
   const lines = [
     "> NEO-PARIS NET // NŒUD 75011",
     "> Jack-in via lien direct................ OK",
@@ -993,19 +1017,19 @@ function runBoot() {
   const finish = () => {
     if (stopped) return;
     stopped = true;
-    store.set("c3030-booted", true);
     boot.classList.add("done");
+    document.body.classList.add("ready");
     setTimeout(() => { boot.hidden = true; }, 450);
   };
   boot.addEventListener("click", finish);
   document.addEventListener("keydown", finish, { once: true });
   const step = () => {
     if (stopped) return;
-    if (i >= lines.length) { setTimeout(finish, 700); return; }
+    if (i >= lines.length) { setTimeout(finish, 1200); return; }
     const text = lines.slice(0, i + 1).map((l, idx) => idx === lines.length - 1 && l ? `<span class="granted">${esc(l)}</span>` : esc(l)).join("\n");
     pre.innerHTML = text + ' <span class="caret"></span>';
     i++;
-    setTimeout(step, i === lines.length ? 500 : 280);
+    setTimeout(step, i === lines.length ? 600 : 380);
   };
   step();
 }
@@ -1119,6 +1143,10 @@ function renderFilters() {
   $("#legend").textContent = "Légende : " + PHASES.map((p) => `${p.short.charAt(0)} = ${p.short} (${p.time})`).join(" · ");
 }
 
+// Rang d'un runner seul selon le nombre de runs cochés : 1 Runner, 2 NetRunner, 3 Edgerunner.
+const RANKS = ["Runner", "Runner", "NetRunner", "Edgerunner"];
+function soloRank(m) { return RANKS[PHASES.filter((p) => m[p.key]).length] || "Runner"; }
+
 function renderRegistry() {
   const list = $("#reg-list");
   if (!state.loaded) {
@@ -1143,7 +1171,7 @@ function renderRegistry() {
   }
   list.innerHTML = groups.map((g) => {
     const lead = g.members[0];
-    const label = g.members.length > 1 ? `Escouade de ${lead.prenom} · ${g.members.length} pers.` : "Runner solo";
+    const label = g.members.length > 1 ? `Escouade de ${lead.prenom} · ${g.members.length} pers.` : soloRank(lead);
     return `<div class="crew ${isMine(g.id) ? "is-mine" : ""}">
       <div class="crew-head">
         <span class="${isMine(g.id) ? "mine-tag" : ""}">${isMine(g.id) ? "Ton contrat · " : ""}${esc(label)}</span>
