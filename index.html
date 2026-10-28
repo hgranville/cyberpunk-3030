@@ -17,7 +17,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230a0612'/%3E%3Cpath d='M12 18h28l-8 8H20v12h12l8 8H12z' fill='%23ff2a6d'/%3E%3Cpath d='M36 30h16v4H36z' fill='%2305d9e8'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Monoton&family=Share+Tech+Mono&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Share+Tech+Mono&family=Tektur:wght@700&display=swap">
 <style>
 /* Layout : terminal d'une corpo de Néo-Paris. Colonne unique, panneaux HUD à coins crochets, une seule scène spectaculaire (le hero néon). */
 :root {
@@ -34,7 +34,7 @@
   --ok: #39ff9c;
   --danger: #ff4d4d;
 
-  --f-display: "Monoton", "Chakra Petch", Impact, sans-serif;
+  --f-display: "Tektur", "Chakra Petch", Impact, sans-serif;
   --f-head: "Chakra Petch", "Arial Narrow", system-ui, sans-serif;
   --f-body: "Chakra Petch", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "Share Tech Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -149,6 +149,10 @@ p { margin: 0; }
   content: ""; position: absolute; left: -10%; right: -10%; bottom: 34%; height: 50%;
   background: radial-gradient(ellipse at 50% 100%, rgba(255,42,109,0.35), transparent 65%);
 }
+.hero-bg::after { /* voile derrière le texte pour garder la lisibilité */
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(10,6,18,0.82) 0%, rgba(10,6,18,0.55) 45%, rgba(10,6,18,0) 75%);
+}
 #skyline { position: absolute; left: 0; right: 0; bottom: 33%; width: 100%; height: 42%; display: block; }
 .floor {
   position: absolute; left: -50%; right: -50%; bottom: 0; height: 34%;
@@ -175,7 +179,7 @@ p { margin: 0; }
   position: relative; display: inline-block; width: max-content; max-width: 100%;
 }
 .hero h1 .num {
-  font-family: var(--f-display); font-weight: 400; font-size: clamp(3.6rem, 18vw, 9.5rem); line-height: 1;
+  font-family: var(--f-display); font-weight: 700; font-size: clamp(3.8rem, 19vw, 9.5rem); line-height: 1; letter-spacing: .02em;
   color: #fff4fa;
   text-shadow: 0 0 4px #fff, 0 0 12px var(--magenta), 0 0 28px var(--magenta), 0 0 60px rgba(255,42,109,0.7);
   animation: neon-on 2.2s ease-out .2s both;
@@ -194,8 +198,21 @@ p { margin: 0; }
 
 .hero-lede { margin-top: 22px; max-width: 34ch; font-size: var(--step-1); line-height: 1.4; color: var(--text); }
 .hero-lede strong { color: var(--yellow); font-weight: 600; }
-.hero-meta { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px 18px; font-family: var(--f-mono); font-size: .9rem; color: var(--dim); }
-.hero-meta span::before { content: "▸ "; color: var(--magenta); }
+.hero-meta {
+  margin: 22px 0 0; display: grid; grid-template-columns: repeat(3, auto); width: max-content; max-width: 100%; gap: 0;
+  background: rgba(10,6,18,0.85); border: 1px solid var(--line); border-left: 2px solid var(--magenta);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+}
+.hero-meta div { padding: 10px 18px; display: grid; gap: 2px; }
+.hero-meta div + div { border-left: 1px solid var(--line); }
+.hero-meta dt { font-family: var(--f-mono); font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; color: var(--cyan); }
+.hero-meta dd { margin: 0; font-family: var(--f-head); font-weight: 600; font-size: 1.1rem; color: var(--text); white-space: nowrap; }
+@media (max-width: 560px) {
+  .hero-meta { grid-template-columns: 1fr; width: 100%; }
+  .hero-meta div { grid-template-columns: 82px minmax(0, 1fr); align-items: baseline; gap: 10px; padding: 9px 14px; }
+  .hero-meta div + div { border-left: 0; border-top: 1px solid var(--line); }
+  .hero-meta dd { white-space: normal; }
+}
 
 .countdown { margin-top: 28px; display: flex; gap: 10px; flex-wrap: wrap; }
 .cd-cell {
@@ -527,11 +544,11 @@ footer b { color: var(--magenta); font-weight: 400; }
         <span class="num">3030</span>
       </h1>
       <p class="hero-lede">Hugo passe en <strong>version 3.0</strong>. Une journée, trois opérations, un seul dress code : le futur.</p>
-      <div class="hero-meta">
-        <span id="meta-date">Samedi 9 janvier 2027</span>
-        <span>Paris 11e</span>
-        <span>11h → tard</span>
-      </div>
+      <dl class="hero-meta">
+        <div><dt>Date</dt><dd>Samedi 9 janvier 2027</dd></div>
+        <div><dt>Secteur</dt><dd>Paris 11e</dd></div>
+        <div><dt>Horaires</dt><dd>De 11h à tard</dd></div>
+      </dl>
       <div class="countdown" id="countdown" aria-label="Compte à rebours avant le début de la mission">
         <div class="cd-cell"><b id="cd-d">--</b><small>jours</small></div>
         <div class="cd-cell"><b id="cd-h">--</b><small>heures</small></div>
