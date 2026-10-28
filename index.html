@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Cyberpunk 3030</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Samedi 9 janvier 2027, Paris 11e. Laser game, déjeuner, soirée bar + DJ set. Enrôle-toi.">
+<meta name="description" content="Samedi 9 janvier 2027, Paris 11e. Laser game, déjeuner, soirée bar + DJ set. Accepte le contrat.">
 <meta name="theme-color" content="#0a0612">
 <meta property="og:type" content="website">
 <meta property="og:title" content="CYBERPUNK 3030 // Hugo passe en v3.0">
-<meta property="og:description" content="Samedi 9 janvier 2027, Paris 11e. Laser game, ravitaillement, soirée bar + DJ set. Dress code obligatoire. Enrôle-toi.">
+<meta property="og:description" content="Samedi 9 janvier 2027, Paris 11e. Laser game, ravitaillement, soirée bar + DJ set. Dress code obligatoire. Accepte le contrat.">
 <meta property="og:image" content="https://hgranville.github.io/cyberpunk-3030/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -266,6 +266,10 @@ section.block { padding-block: clamp(56px, 9vw, 96px); border-bottom: 1px solid 
 .transmission { font-size: 1.06rem; display: grid; gap: 14px; max-width: 62ch; }
 .transmission .from { font-family: var(--f-mono); font-size: .8rem; color: var(--cyan); letter-spacing: .1em; }
 .transmission em { color: var(--yellow); font-style: normal; }
+.kw { color: var(--yellow); }
+.transmission .hook { font-family: var(--f-head); font-weight: 700; font-size: var(--step-1); letter-spacing: .06em; text-transform: uppercase; color: var(--magenta); }
+.motto { font-family: var(--f-mono); font-size: .85rem; color: var(--magenta); letter-spacing: .04em; }
+.glossary { font-family: var(--f-mono); font-size: .85rem; color: var(--dim); border-left: 2px solid var(--yellow); padding: 4px 0 4px 12px; max-width: 62ch; }
 .transmission .sign { font-family: var(--f-mono); color: var(--magenta); }
 .directives { display: grid; gap: 14px; }
 .directives h3 { font-family: var(--f-mono); font-weight: 400; font-size: .8rem; letter-spacing: .16em; color: var(--yellow); text-transform: uppercase; }
@@ -522,11 +526,11 @@ footer b { color: var(--magenta); font-weight: 400; }
       <a href="#briefing">Briefing</a>
       <a href="#programme">Programme</a>
       <a href="#dresscode">Dress code</a>
-      <a href="#enrolement">Enrôlement</a>
+      <a href="#enrolement">Inscription</a>
       <a href="#registre">Runners</a>
       <a href="#faq">FAQ</a>
     </nav>
-    <div class="live" aria-live="polite"><span id="live-count" class="tnum">--</span>&nbsp;runners enrôlés</div>
+    <div class="live" aria-live="polite"><span id="live-count" class="tnum">--</span>&nbsp;runners sous contrat</div>
   </div>
 </header>
 
@@ -543,7 +547,7 @@ footer b { color: var(--magenta); font-weight: 400; }
         <span class="word glitch" data-text="Cyberpunk">Cyberpunk</span>
         <span class="num">3030</span>
       </h1>
-      <p class="hero-lede">Hugo passe en <strong>version 3.0</strong>. Une journée, trois opérations, un seul dress code : le futur.</p>
+      <p class="hero-lede">Hugo passe en <strong>version 3.0</strong>. Une journée, trois <span class="kw">runs</span>, un seul dress code : le futur.</p>
       <dl class="hero-meta">
         <div><dt>Date</dt><dd>Samedi 9 janvier 2027</dd></div>
         <div><dt>Secteur</dt><dd>Paris 11e</dd></div>
@@ -555,10 +559,10 @@ footer b { color: var(--magenta); font-weight: 400; }
         <div class="cd-cell"><b id="cd-m">--</b><small>min</small></div>
         <div class="cd-cell"><b id="cd-s">--</b><small>sec</small></div>
       </div>
-      <p class="cd-status" id="cd-status">Avant le lancement de la Phase 01</p>
+      <p class="cd-status" id="cd-status">Avant le jack-in du Run 01</p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="#enrolement">S'enrôler maintenant</a>
-        <a class="btn btn-ghost" href="#programme">Voir la mission</a>
+        <a class="btn btn-primary" href="#enrolement">Accepter le contrat</a>
+        <a class="btn btn-ghost" href="#programme">Voir le programme</a>
       </div>
     </div>
   </section>
@@ -572,22 +576,22 @@ footer b { color: var(--magenta); font-weight: 400; }
       </div>
       <div class="briefing">
         <div class="hud transmission">
-          <p class="from">DE : H.GRANVILLE // À : TOI, RUNNER // OBJET : RECRUTEMENT</p>
-          <p>Runner,</p>
-          <p>Le 9 janvier 3030, je termine ma troisième décennie dans les rues de Néo-Paris. Le Réseau m'a autorisé à constituer une crew pour marquer le coup, et ton nom est remonté dans les fichiers.</p>
-          <p>Au programme : une opération tactique sous les lasers, un ravitaillement en équipe, puis une nuit en <em>overdrive</em> au bar avec DJ set jusqu'à extinction des néons.</p>
-          <p>Viens à une phase, à deux, ou à toute la mission. Mais viens <em>déguisé</em> : les civils seront repérés.</p>
+          <p class="from">DE : TON FIXER, H.GRANVILLE // À : TOI, RUNNER // OBJET : CONTRAT</p>
+          <p class="hook">Wake up, Samurai.</p>
+          <p>Le 9 janvier 3030, je passe la barre des trente ans dans les rues de Néo-Paris. Pour marquer le coup, je recrute une équipe de <em>runners</em>, et ton nom est remonté dans mes fichiers.</p>
+          <p>Le contrat tient en trois <em>runs</em> : une chasse aux réplicants sous les lasers, un ravitaillement tous ensemble, puis l'<em>Afterlife Overdrive</em>, une nuit au bar avec DJ set jusqu'à extinction des néons.</p>
+          <p>Viens à un run, à deux ou aux trois. Mais viens <em>chromé</em>, c'est-à-dire déguisé : les corpos en chemise seront repérés.</p>
           <p class="sign">// Fin de transmission. Ce message ne s'autodétruira pas.</p>
         </div>
         <div class="hud mag directives">
           <h3>Directives</h3>
           <ol>
-            <li><div><b>Enrôle-toi aujourd'hui.</b> <span>Les lieux se réservent sur la base des inscrits. Tu pourras modifier tes choix plus tard.</span></div></li>
-            <li><div><b>Choisis tes phases.</b> <span>Laser, déjeuner, soirée : coche celles où tu seras là.</span></div></li>
-            <li><div><b>Ajoute ta crew.</b> <span>Ton ou ta +1, tes potes : inscris-les dans le même formulaire.</span></div></li>
-            <li><div><b>Prépare ton costume.</b> <span>Le meilleur look de la soirée sera récompensé.</span></div></li>
+            <li><div><b>Accepte le <span class="kw">contrat</span> aujourd'hui.</b> <span>Les lieux se réservent sur la base des inscrits. Tu pourras modifier tes choix plus tard.</span></div></li>
+            <li><div><b>Choisis tes <span class="kw">runs</span>.</b> <span>Laser game, déjeuner, soirée : coche ceux où tu seras là.</span></div></li>
+            <li><div><b>Monte ton <span class="kw">escouade</span>.</b> <span>Ton ou ta +1, tes potes : inscris-les dans le même formulaire.</span></div></li>
+            <li><div><b>Prépare ton <span class="kw">chrome</span>.</b> <span>Ton déguisement. Le meilleur look de la journée sera récompensé.</span></div></li>
           </ol>
-          <a class="btn btn-primary" href="#enrolement">S'enrôler</a>
+          <a class="btn btn-primary" href="#enrolement">Accepter le contrat</a>
         </div>
       </div>
     </div>
@@ -599,7 +603,7 @@ footer b { color: var(--magenta); font-weight: 400; }
       <div class="sec-head">
         <p class="sec-tag">// Déroulé des opérations</p>
         <h2 id="programme-title">Programme</h2>
-        <p>Samedi 9 janvier 2027, tout dans le 11e. Chacun règle sa part sur place.</p>
+        <p>Samedi 9 janvier 2027, trois <span class="kw">runs</span> dans le 11e : viens à un, deux ou aux trois. Chacun règle ses <span class="kw">eddies</span> (sa part) sur place.</p>
       </div>
       <div class="timeline" id="timeline"></div>
     </div>
@@ -611,12 +615,13 @@ footer b { color: var(--magenta); font-weight: 400; }
       <div class="sec-head">
         <p class="sec-tag">// Protocole visuel</p>
         <h2 id="dress-title">Dress code</h2>
-        <p>Rétro-futurisme, néons, chrome, cuir et circuits imprimés. Pas besoin de budget : il faut juste jouer le jeu.</p>
+        <p>Rétro-futurisme, néons, cuir, métal et circuits imprimés. Pas besoin de budget : il faut juste jouer le jeu.</p>
+        <p class="glossary">Dans l'univers cyberpunk, le corps est une enveloppe (un <span class="kw">sleeve</span>, un <span class="kw">shell</span>) qu'on améliore à coups d'implants, le <span class="kw">chrome</span>. Ici, ton chrome, c'est ton déguisement.</p>
       </div>
       <div class="dress-intro">
         <div class="alert">
           <h3>⚠ Déguisement fortement recommandé</h3>
-          <p>Un runner en civil se fait remarquer. Le meilleur costume de la journée sera récompensé pendant la soirée.</p>
+          <p>Les corpos en chemise se font repérer. Le meilleur <span class="kw">chrome</span> de la journée sera récompensé pendant la soirée, et immortalisé en <span class="kw">braindance</span> (en photo, pour les civils).</p>
         </div>
         <div class="palette">
           <h3>Palette autorisée</h3>
@@ -631,7 +636,7 @@ footer b { color: var(--magenta); font-weight: 400; }
       </div>
       <div class="levels">
         <div class="hud level">
-          <p class="lv">Niveau 1 // Effort minimum</p>
+          <p class="lv">Niveau 1 // Sleeve discret</p>
           <h3>Civil infiltré</h3>
           <div class="meter" aria-label="Intensité 1 sur 3"><i class="on"></i><i></i><i></i></div>
           <ul>
@@ -641,7 +646,7 @@ footer b { color: var(--magenta); font-weight: 400; }
           </ul>
         </div>
         <div class="hud mag level">
-          <p class="lv">Niveau 2 // Runner</p>
+          <p class="lv">Niveau 2 // Shell augmenté</p>
           <h3>Street samurai</h3>
           <div class="meter" aria-label="Intensité 2 sur 3"><i class="on"></i><i class="on"></i><i></i></div>
           <ul>
@@ -654,6 +659,7 @@ footer b { color: var(--magenta); font-weight: 400; }
         <div class="hud yel level">
           <p class="lv">Niveau 3 // Full chrome</p>
           <h3>Cyborg intégral</h3>
+          <p class="motto">« Plus humain que l'humain. »</p>
           <div class="meter" aria-label="Intensité 3 sur 3"><i class="on"></i><i class="on"></i><i class="on"></i></div>
           <ul>
             <li>Implants : maquillage circuits, prothèses en carton argenté</li>
@@ -666,7 +672,7 @@ footer b { color: var(--magenta); font-weight: 400; }
       <div class="tips">
         <div class="tip"><b>Où trouver</b><span>Friperies, bazars, rayons déco de Noël (guirlandes LED à piles), magasins de déguisement.</span></div>
         <div class="tip"><b>Astuce</b><span>Du scotch métallisé et du carton suffisent pour un implant convaincant.</span></div>
-        <div class="tip"><b>Pense pratique</b><span>Le laser game se joue en mouvement : garde le costume complet pour le soir si besoin.</span></div>
+        <div class="tip"><b>Pense pratique</b><span>Le laser game se joue en mouvement : garde le chrome complet pour l'Afterlife si besoin.</span></div>
       </div>
     </div>
   </section>
@@ -675,9 +681,9 @@ footer b { color: var(--magenta); font-weight: 400; }
   <section class="block" id="enrolement" aria-labelledby="enrol-title">
     <div class="wrap">
       <div class="sec-head">
-        <p class="sec-tag">// Fiche d'enrôlement</p>
-        <h2 id="enrol-title">Enrôlement</h2>
-        <p>Inscris-toi, ajoute les personnes qui viennent avec toi, et coche les phases de chacun. Modifiable à tout moment, depuis n'importe quel appareil, via le registre.</p>
+        <p class="sec-tag">// Inscription</p>
+        <h2 id="enrol-title">Accepter le contrat</h2>
+        <p>Inscris-toi, ajoute ton <span class="kw">escouade</span> (les personnes qui viennent avec toi) et coche les <span class="kw">runs</span> de chacun. Modifiable à tout moment, depuis n'importe quel appareil, via le registre.</p>
       </div>
 
       <div class="enrol-grid">
@@ -686,19 +692,19 @@ footer b { color: var(--magenta); font-weight: 400; }
         <div class="hud" id="enrol-panel">
           <form id="enrol" novalidate>
             <div class="form-head">
-              <h3 id="form-title">Nouvel enrôlement</h3>
+              <h3 id="form-title">Nouveau contrat</h3>
               <span class="mode" id="form-mode">Création</span>
             </div>
             <p class="edit-warn" id="edit-warn" hidden></p>
             <div class="members" id="members"></div>
-            <button type="button" class="add-member" id="add-member">+ Ajouter une personne à ma crew</button>
+            <button type="button" class="add-member" id="add-member">+ Ajouter un membre à mon escouade</button>
             <div class="hp" aria-hidden="true">
               <label for="website">Ne pas remplir</label>
               <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
             </div>
             <p class="form-msg err" id="form-err" role="alert" hidden></p>
             <div class="form-actions">
-              <button type="submit" class="btn btn-primary" id="submit-btn">Transmettre l'enrôlement</button>
+              <button type="submit" class="btn btn-primary" id="submit-btn">Accepter le contrat</button>
               <button type="button" class="btn btn-ghost" id="cancel-edit" hidden>Annuler</button>
               <span class="spacer"></span>
               <button type="button" class="btn btn-danger btn-sm" id="delete-btn" hidden>Supprimer l'inscription</button>
@@ -706,12 +712,12 @@ footer b { color: var(--magenta); font-weight: 400; }
           </form>
 
           <div class="success" id="success" hidden>
-            <p class="big" id="success-title">Enrôlement confirmé</p>
+            <p class="big" id="success-title">Multipass validé</p>
             <ul id="success-list"></ul>
-            <p class="mono" style="color:var(--dim);font-size:.85rem">Cet appareil se souvient de ton enrôlement. Depuis un autre appareil, retrouve ton nom dans le registre ci-dessous.</p>
+            <p class="mono" style="color:var(--dim);font-size:.85rem">Cet appareil garde ton Multipass en mémoire. Depuis un autre appareil, retrouve ton nom dans le registre ci-dessous.</p>
             <div class="actions">
               <button type="button" class="btn btn-ghost btn-sm" id="success-edit">Modifier</button>
-              <button type="button" class="btn btn-ghost btn-sm" id="success-new">Inscrire une autre crew</button>
+              <button type="button" class="btn btn-ghost btn-sm" id="success-new">Inscrire une autre escouade</button>
               <a class="btn btn-ghost btn-sm" href="#registre">Voir le registre</a>
             </div>
           </div>
@@ -730,7 +736,7 @@ footer b { color: var(--magenta); font-weight: 400; }
       </div>
       <div class="stats" id="stats"></div>
       <div class="reg-tools">
-        <div class="filters" role="group" aria-label="Filtrer par phase" id="filters"></div>
+        <div class="filters" role="group" aria-label="Filtrer par run" id="filters"></div>
         <div class="search">
           <label class="sr-only" for="reg-search">Rechercher un nom</label>
           <input type="search" id="reg-search" placeholder="Rechercher un nom…" autocomplete="off">
@@ -752,20 +758,20 @@ footer b { color: var(--magenta); font-weight: 400; }
       </div>
       <div class="faq">
         <details>
-          <summary>Je dois venir à toute la journée ?</summary>
-          <div class="ans"><p>Non. Choisis les phases qui t'arrangent : laser, déjeuner, soirée, ou n'importe quelle combinaison. Coche simplement les bonnes cases.</p></div>
+          <summary>Pilule rouge ou pilule bleue : je dois venir à toute la journée ?</summary>
+          <div class="ans"><p>Non. Choisis les <span class="kw">runs</span> qui t'arrangent : laser game, déjeuner, soirée, ou n'importe quelle combinaison. Coche simplement les bonnes cases.</p></div>
         </details>
         <details>
           <summary>Combien ça coûte ?</summary>
-          <div class="ans"><p>Chacun règle sa part sur place (laser game, repas, consos). Hugo prend en charge une partie, notamment au bar le soir.</p></div>
+          <div class="ans"><p>Chacun règle ses <span class="kw">eddies</span> (sa part) sur place : laser game, repas, consos. Ton <span class="kw">fixer</span> prend en charge une partie, notamment au bar le soir.</p></div>
         </details>
         <details>
           <summary>Je peux venir accompagné(e) ?</summary>
-          <div class="ans"><p>Oui. Dans le formulaire, touche <b>« Ajouter une personne à ma crew »</b> et coche ses phases. Chaque personne compte pour les réservations.</p></div>
+          <div class="ans"><p>Oui, monte ton <span class="kw">escouade</span> : dans le formulaire, touche <b>« Ajouter un membre à mon escouade »</b> et coche ses runs. Chaque personne compte pour les réservations.</p></div>
         </details>
         <details>
           <summary>Je ne suis pas encore sûr(e), je m'inscris quand même ?</summary>
-          <div class="ans"><p>Oui, et le plus tôt possible : les réservations se font sur la base des inscrits. Coche ce qui est probable aujourd'hui, tu pourras décocher plus tard.</p></div>
+          <div class="ans"><p>Oui, accepte le contrat le plus tôt possible : les réservations se font sur la base des inscrits. Coche ce qui est probable aujourd'hui, tu pourras décocher plus tard.</p></div>
         </details>
         <details>
           <summary>Comment modifier ou annuler mon inscription ?</summary>
@@ -773,15 +779,15 @@ footer b { color: var(--magenta); font-weight: 400; }
         </details>
         <details>
           <summary>Le déguisement est obligatoire ?</summary>
-          <div class="ans"><p>Fortement recommandé. Même un seul accessoire lumineux fait l'affaire. Regarde le <a href="#dresscode">dress code</a> pour des idées à tous les niveaux d'effort.</p></div>
+          <div class="ans"><p>Fortement recommandé. Même un seul accessoire lumineux suffit pour passer du côté des runners. Regarde le <a href="#dresscode">dress code</a> pour des idées à tous les niveaux d'effort.</p></div>
         </details>
         <details>
           <summary>Il y a une pause entre le déjeuner et la soirée ?</summary>
-          <div class="ans"><p>Oui, l'après-midi est libre entre la fin du déjeuner et 19h : idéal pour finaliser ton costume.</p></div>
+          <div class="ans"><p>Oui, l'après-midi est libre entre la fin du déjeuner et 19h : idéal pour finaliser ton <span class="kw">chrome</span>.</p></div>
         </details>
         <details>
           <summary>J'ai une autre question</summary>
-          <div class="ans"><p>Écris directement à Hugo.</p></div>
+          <div class="ans"><p>Écris directement à ton <span class="kw">fixer</span>, Hugo.</p></div>
         </details>
       </div>
     </div>
@@ -790,12 +796,12 @@ footer b { color: var(--magenta); font-weight: 400; }
 
 <footer>
   <div class="wrap">
-    <span>© 3030 <b>Corpo Granville</b> // Hugo v3.0</span>
+    <span>© 3030 <b>Granville Fixer Services</b> // Hugo v3.0</span>
     <span>Transmission terminée_</span>
   </div>
 </footer>
 
-<div class="mobile-cta" id="mobile-cta"><a class="btn btn-primary" href="#enrolement">S'enrôler maintenant</a></div>
+<div class="mobile-cta" id="mobile-cta"><a class="btn btn-primary" href="#enrolement">Accepter le contrat</a></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -813,20 +819,21 @@ const CONFIG = {
   phases: [
     {
       key: "laser",
-      code: "Phase 01",
+      code: "Run 01",
       time: "11:00",
       short: "Laser",
-      title: "Opération Neon Strike",
+      title: "Chasse aux réplicants",
       kind: "Laser game",
       venue: "Urban Laser Paris 11",
       address: "160 rue Saint-Maur, 75011 Paris",
       status: "ok",              // "ok" = lieu confirmé, "wait" = à confirmer
       statusLabel: "Lieu confirmé",
-      desc: "Briefing tactique, équipes tirées au sort, et que la meilleure crew gagne. Arrive à l'heure : les parties s'enchaînent."
+      // [[mot]] = mot-clé surligné en jaune
+      desc: "Briefing tactique, équipes tirées au sort, et que les [[réplicants]] se tiennent prêts. Arrive à l'heure : les parties s'enchaînent."
     },
     {
       key: "dejeuner",
-      code: "Phase 02",
+      code: "Run 02",
       time: "14:00",
       short: "Déjeuner",
       title: "Ravitaillement",
@@ -835,24 +842,24 @@ const CONFIG = {
       address: "Coordonnées transmises très bientôt",
       status: "wait",
       statusLabel: "À confirmer",
-      desc: "On recharge les batteries ensemble après l'opération. Le lieu sera annoncé ici dès qu'il est réservé."
+      desc: "On recharge les batteries tous ensemble après la chasse. Le lieu sera annoncé ici dès qu'il est réservé."
     },
     {
       key: "soiree",
-      code: "Phase 03",
+      code: "Run 03",
       time: "19:00",
       short: "Soirée",
-      title: "Overdrive",
+      title: "Afterlife Overdrive",
       kind: "Bar + DJ set",
       venue: "La Morézienne",
       address: "13 rue Marguerite Moret, 75011 Paris",
       status: "wait",
       statusLabel: "À confirmer",
-      desc: "Néons, DJ set et tournées. Hugo prend en charge une partie des consos. Remise du prix du meilleur costume."
+      desc: "Néons, DJ set et tournées jusqu'à extinction des feux. Ton [[fixer]] arrose une partie des consos. Remise du prix du meilleur [[chrome]]."
     }
   ],
 
-  interludes: { soiree: { time: "16:00", text: "Temps libre // recharge, finitions du costume" } },
+  interludes: { soiree: { time: "16:00", text: "Temps libre // recharge, finitions du chrome" } },
 
   maxMembers: 10
 };
@@ -862,6 +869,7 @@ const CONFIG = {
    ===================================================================== */
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const kw = (v) => esc(v).replace(/\[\[(.+?)\]\]/g, '<span class="kw">$1</span>');
 const norm = (v) => String(v || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const store = {
@@ -973,8 +981,8 @@ function runBoot() {
   boot.hidden = false;
   const lines = [
     "> NEO-PARIS NET // NŒUD 75011",
-    "> Connexion via lien direct.............. OK",
-    "> Décryptage de la transmission.......... OK",
+    "> Jack-in via lien direct................ OK",
+    "> Décryptage du contrat.................. OK",
     "> Profil détecté : RUNNER POTENTIEL",
     "> Chargement de la mission CYBERPUNK 3030",
     "",
@@ -1051,7 +1059,7 @@ function tickCountdown() {
   const s = Math.floor(diff / 1000);
   const pad = (n) => String(n).padStart(2, "0");
   $("#cd-d").textContent = d; $("#cd-h").textContent = pad(h); $("#cd-m").textContent = pad(m); $("#cd-s").textContent = pad(s);
-  $("#cd-status").textContent = now < start ? "Avant le lancement de la Phase 01" : now < end ? "Mission en cours" : "Mission accomplie. Merci runners.";
+  $("#cd-status").textContent = now < start ? "Avant le jack-in du Run 01" : now < end ? "Jack-in effectué : mission en cours" : "Mission accomplie. Merci runners.";
 }
 
 /* =====================================================================
@@ -1074,7 +1082,7 @@ function renderTimeline() {
         </div>
         <h3>${esc(p.title)}</h3>
         <div class="venue"><strong>${esc(p.venue)}</strong><span>${esc(p.address)}</span></div>
-        <p class="phase-desc">${esc(p.desc)}</p>
+        <p class="phase-desc">${kw(p.desc)}</p>
         <div class="phase-foot">
           <span class="count"><b data-count="${p.key}">${state.loaded ? counts[p.key] : "--"}</b> runners inscrits</span>
           ${maps}
@@ -1101,7 +1109,7 @@ function renderCounts() {
   $("#live-count").textContent = state.loaded ? c.total : "--";
   document.querySelectorAll("[data-count]").forEach((el) => { el.textContent = state.loaded ? c[el.dataset.count] : "--"; });
   $("#stats").innerHTML =
-    `<div class="stat total"><small>Runners enrôlés</small><b>${state.loaded ? c.total : "--"}</b></div>` +
+    `<div class="stat total"><small>Runners sous contrat</small><b>${state.loaded ? c.total : "--"}</b></div>` +
     PHASES.map((p) => `<div class="stat"><small>${esc(p.short)} · ${esc(p.time)}</small><b>${state.loaded ? c[p.key] : "--"}</b></div>`).join("");
 }
 
@@ -1126,7 +1134,7 @@ function renderRegistry() {
     .filter((g) => g.shown.length);
 
   if (!state.groups.length) {
-    list.innerHTML = `<div class="reg-empty"><span>Aucun runner enrôlé pour l'instant. Sois le premier nom du registre.</span><a class="btn btn-primary btn-sm" href="#enrolement">S'enrôler</a></div>`;
+    list.innerHTML = `<div class="reg-empty"><span>Aucun runner sous contrat pour l'instant. Sois le premier nom du registre.</span><a class="btn btn-primary btn-sm" href="#enrolement">Accepter le contrat</a></div>`;
     return;
   }
   if (!groups.length) {
@@ -1135,10 +1143,10 @@ function renderRegistry() {
   }
   list.innerHTML = groups.map((g) => {
     const lead = g.members[0];
-    const label = g.members.length > 1 ? `Crew de ${lead.prenom} · ${g.members.length} pers.` : "Solo";
+    const label = g.members.length > 1 ? `Escouade de ${lead.prenom} · ${g.members.length} pers.` : "Runner solo";
     return `<div class="crew ${isMine(g.id) ? "is-mine" : ""}">
       <div class="crew-head">
-        <span class="${isMine(g.id) ? "mine-tag" : ""}">${isMine(g.id) ? "Ton enrôlement · " : ""}${esc(label)}</span>
+        <span class="${isMine(g.id) ? "mine-tag" : ""}">${isMine(g.id) ? "Ton contrat · " : ""}${esc(label)}</span>
         <button type="button" class="btn btn-ghost btn-sm" data-edit="${esc(g.id)}">Modifier</button>
       </div>
       <ul>${g.shown.map((m) => `<li><span class="name">${esc(displayName(m))}</span><span class="tags">${PHASES.map((p) => `<span class="tag ${m[p.key] ? "on" : ""}" title="${esc(p.short)}${m[p.key] ? "" : " : non"}">${esc(p.short.charAt(0))}</span>`).join("")}</span></li>`).join("")}</ul>
@@ -1152,7 +1160,7 @@ function renderMine() {
   if (!state.loaded || !mineGroups.length || state.editingId) { box.hidden = true; return; }
   box.hidden = false;
   box.innerHTML = mineGroups.map((g) => `
-    <p>Enrôlement enregistré sur cet appareil : <span>${esc(g.members.map(displayName).join(", "))}</span></p>
+    <p>Contrat enregistré sur cet appareil : <span>${esc(g.members.map(displayName).join(", "))}</span></p>
     <div class="actions"><button type="button" class="btn btn-ghost btn-sm" data-edit="${esc(g.id)}">Modifier</button></div>`).join("");
 }
 
@@ -1190,7 +1198,7 @@ function renderMembers() {
         <div class="field"><label for="m${i}-nom">Nom</label><input id="m${i}-nom" data-i="${i}" data-k="nom" value="${esc(m.nom)}" autocomplete="${i === 0 ? "family-name" : "off"}" maxlength="40" required></div>
       </div>
       <fieldset class="phases-pick">
-        <legend><span>Phases</span><button type="button" data-all="${i}">${PHASES.every((p) => m[p.key]) ? "Tout décocher" : "Tout cocher"}</button></legend>
+        <legend><span>Runs</span><button type="button" data-all="${i}">${PHASES.every((p) => m[p.key]) ? "Tout décocher" : "Tout cocher"}</button></legend>
         <div class="picks">
           ${PHASES.map((p) => `<div class="pick"><input type="checkbox" id="m${i}-${p.key}" data-i="${i}" data-k="${p.key}" ${m[p.key] ? "checked" : ""}><label for="m${i}-${p.key}"><b>${esc(p.short)}</b><small>${esc(p.time)} · ${esc(p.kind)}</small></label></div>`).join("")}
         </div>
@@ -1202,9 +1210,9 @@ function renderMembers() {
 function setMode() {
   const editing = !!state.editingId;
   const g = editing ? state.groups.find((x) => x.id === state.editingId) : null;
-  $("#form-title").textContent = editing ? "Modifier l'enrôlement" : "Nouvel enrôlement";
+  $("#form-title").textContent = editing ? "Modifier le contrat" : "Nouveau contrat";
   $("#form-mode").textContent = editing ? "Mise à jour" : "Création";
-  $("#submit-btn").textContent = editing ? "Mettre à jour" : "Transmettre l'enrôlement";
+  $("#submit-btn").textContent = editing ? "Mettre à jour le contrat" : "Accepter le contrat";
   $("#cancel-edit").hidden = !editing;
   $("#delete-btn").hidden = !editing;
   disarmDelete();
@@ -1254,7 +1262,7 @@ function validate() {
     }
     if (!PHASES.some((p) => m[p.key])) {
       $(`.member[data-i="${i}"]`).classList.add("invalid");
-      return { error: `${m.prenom} : coche au moins une phase (ou retire cette personne).` };
+      return { error: `${m.prenom} : coche au moins un run (ou retire cette personne).` };
     }
   }
   // Doublons dans le formulaire
@@ -1269,7 +1277,7 @@ function validate() {
     if (g.id === state.editingId) continue;
     for (const m of members) {
       if (g.members.some((x) => norm(displayName(x)) === norm(displayName(m)))) {
-        return { error: `${displayName(m)} est déjà inscrit(e) dans une autre crew. Modifie plutôt cette inscription depuis le registre.`, dupGroup: g.id };
+        return { error: `${displayName(m)} est déjà inscrit(e) dans une autre escouade. Modifie plutôt cette inscription depuis le registre.`, dupGroup: g.id };
       }
     }
   }
@@ -1301,7 +1309,7 @@ async function submit(ev) {
     state.loaded = true;
     remember(res.groupId);
     showSuccess(res.groupId, wasEdit);
-    toast(wasEdit ? "Inscription mise à jour." : "Enrôlement transmis. Bienvenue dans la crew.");
+    toast(wasEdit ? "Contrat mis à jour." : "Multipass validé. Bienvenue dans l'équipe, runner.");
   } catch (e) {
     showError((e && e.message && !/fetch|network|json/i.test(e.message) ? e.message : "Transmission échouée. Vérifie ta connexion puis réessaie."));
   } finally {
@@ -1315,7 +1323,7 @@ function showSuccess(groupId, wasEdit) {
   state.successId = groupId;
   $("#enrol").hidden = true;
   $("#success").hidden = false;
-  $("#success-title").textContent = wasEdit ? "Inscription mise à jour" : `Enrôlement confirmé${g ? ", " + g.members[0].prenom : ""}`;
+  $("#success-title").textContent = wasEdit ? "Multipass mis à jour" : `Multipass validé${g ? ", " + g.members[0].prenom : ""}`;
   $("#success-list").innerHTML = g ? g.members.map((m) => `<li>▸ ${esc(displayName(m))} : ${PHASES.filter((p) => m[p.key]).map((p) => esc(p.short)).join(" + ")}</li>`).join("") : "";
   renderAll();
   $("#enrol-panel").scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
