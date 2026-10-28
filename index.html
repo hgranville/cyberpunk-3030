@@ -1,0 +1,1431 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cyberpunk 3030</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Samedi 9 janvier 2027, Paris 11e. Laser game, déjeuner, soirée bar + DJ set. Enrôle-toi.">
+<meta name="theme-color" content="#0a0612">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CYBERPUNK 3030 // Hugo passe en v3.0">
+<meta property="og:description" content="Samedi 9 janvier 2027, Paris 11e. Laser game, ravitaillement, soirée bar + DJ set. Dress code obligatoire. Enrôle-toi.">
+<meta property="og:image" content="https://TONPSEUDO.github.io/cyberpunk-3030/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230a0612'/%3E%3Cpath d='M12 18h28l-8 8H20v12h12l8 8H12z' fill='%23ff2a6d'/%3E%3Cpath d='M36 30h16v4H36z' fill='%2305d9e8'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Monoton&family=Share+Tech+Mono&display=swap">
+<style>
+/* Layout : terminal d'une corpo de Néo-Paris. Colonne unique, panneaux HUD à coins crochets, une seule scène spectaculaire (le hero néon). */
+:root {
+  color-scheme: dark;
+  --void: #0a0612;        /* fond nuit violette */
+  --panel: #120b22;       /* surfaces */
+  --panel-2: #1a1033;
+  --line: #2f2152;        /* filets */
+  --text: #ece6f7;
+  --dim: #a297c0;
+  --magenta: #ff2a6d;     /* néon principal */
+  --cyan: #05d9e8;        /* néon secondaire, données */
+  --yellow: #f9f002;      /* actions, alertes */
+  --ok: #39ff9c;
+  --danger: #ff4d4d;
+
+  --f-display: "Monoton", "Chakra Petch", Impact, sans-serif;
+  --f-head: "Chakra Petch", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "Chakra Petch", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "Share Tech Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  --maxw: 980px;
+  --step--1: 0.85rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.6rem;
+  --step-3: clamp(1.9rem, 5vw, 2.6rem);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; background: var(--void); }
+body {
+  margin: 0;
+  background: var(--void);
+  color: var(--text);
+  font-family: var(--f-body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 60; background: var(--void);
+}
+/* Scanlines + vignette sur toute la page */
+body::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 50;
+  background:
+    repeating-linear-gradient(to bottom, rgba(255,255,255,0.025) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%);
+}
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+a { color: var(--cyan); }
+a:hover { color: var(--yellow); }
+:focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+p { margin: 0; }
+
+.wrap {
+  width: 100%;
+  max-width: calc(var(--maxw) + 32px);
+  margin-inline: auto;
+  padding-left: var(--gutter-l);
+  padding-right: var(--gutter-r);
+}
+.mono { font-family: var(--f-mono); }
+.tnum { font-variant-numeric: tabular-nums; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ===================== BOOT ===================== */
+#boot {
+  position: fixed; inset: 0; z-index: 100;
+  background: var(--void);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px var(--gutter-r) 24px var(--gutter-l);
+  font-family: var(--f-mono); color: var(--ok);
+  cursor: pointer;
+  transition: opacity .4s ease, visibility .4s;
+}
+#boot.done { opacity: 0; visibility: hidden; }
+#boot pre {
+  margin: 0; width: 100%; max-width: 560px;
+  white-space: pre-wrap; font: inherit; font-size: clamp(0.82rem, 3.2vw, 1rem); line-height: 1.7;
+  text-shadow: 0 0 6px rgba(57,255,156,0.6);
+}
+#boot .granted { color: var(--yellow); text-shadow: 0 0 10px rgba(249,240,2,0.7); }
+#boot .skip { position: absolute; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); left: 0; right: 0; text-align: center; color: var(--dim); font-size: .8rem; letter-spacing: .12em; }
+.caret { display: inline-block; width: .6em; height: 1em; background: currentColor; vertical-align: -0.15em; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ===================== BARRE DU HAUT ===================== */
+.topbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40;
+  background: rgba(10,6,18,0.88);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.topbar .wrap { display: flex; align-items: center; gap: 16px; height: 56px; }
+.brand { font-family: var(--f-mono); font-size: .95rem; letter-spacing: .14em; color: var(--text); text-decoration: none; white-space: nowrap; }
+.brand b { color: var(--magenta); font-weight: 400; }
+.nav { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; flex: 1; min-width: 0; }
+.nav::-webkit-scrollbar { display: none; }
+.nav a {
+  font-family: var(--f-mono); font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--dim); text-decoration: none; padding: 6px 8px; white-space: nowrap;
+}
+.nav a:hover { color: var(--cyan); }
+.live { font-family: var(--f-mono); font-size: .78rem; color: var(--ok); white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 8px var(--ok); animation: blink 2s steps(1) infinite; }
+@media (max-width: 720px) {
+  .nav { display: none; }
+  .topbar .wrap { justify-content: space-between; }
+}
+
+.demo-banner {
+  background: repeating-linear-gradient(-45deg, var(--yellow) 0 12px, #1a1600 12px 24px);
+  color: #000; font-family: var(--f-mono); font-size: .8rem; text-align: center;
+}
+.demo-banner span { background: var(--yellow); padding: 4px 10px; display: inline-block; margin-block: 4px; }
+
+/* ===================== HERO ===================== */
+.hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); isolation: isolate; }
+.hero-bg { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.hero-bg::before { /* halo d'horizon */
+  content: ""; position: absolute; left: -10%; right: -10%; bottom: 34%; height: 50%;
+  background: radial-gradient(ellipse at 50% 100%, rgba(255,42,109,0.35), transparent 65%);
+}
+#skyline { position: absolute; left: 0; right: 0; bottom: 33%; width: 100%; height: 42%; display: block; }
+.floor {
+  position: absolute; left: -50%; right: -50%; bottom: 0; height: 34%;
+  background-image:
+    linear-gradient(rgba(5,217,232,0.55) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(5,217,232,0.55) 1px, transparent 1px);
+  background-size: 48px 48px;
+  transform: perspective(260px) rotateX(58deg);
+  transform-origin: 50% 0;
+  animation: floor 1.8s linear infinite;
+  mask-image: linear-gradient(to bottom, transparent, #000 30%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 30%);
+}
+@keyframes floor { to { background-position: 0 48px; } }
+.hero .wrap { position: relative; padding-block: clamp(40px, 9vw, 96px) clamp(140px, 26vw, 240px); }
+.eyebrow {
+  font-family: var(--f-mono); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--cyan);
+}
+.eyebrow .red { color: var(--magenta); }
+.hero h1 { margin-top: 18px; display: flex; flex-direction: column; gap: 4px; }
+.hero h1 .word {
+  font-family: var(--f-head); font-weight: 700; font-size: clamp(2.6rem, 11vw, 5.6rem);
+  letter-spacing: .04em; line-height: .95; text-transform: uppercase; color: var(--text);
+  position: relative; display: inline-block; width: max-content; max-width: 100%;
+}
+.hero h1 .num {
+  font-family: var(--f-display); font-weight: 400; font-size: clamp(3.6rem, 18vw, 9.5rem); line-height: 1;
+  color: #fff4fa;
+  text-shadow: 0 0 4px #fff, 0 0 12px var(--magenta), 0 0 28px var(--magenta), 0 0 60px rgba(255,42,109,0.7);
+  animation: neon-on 2.2s ease-out .2s both;
+}
+@keyframes neon-on {
+  0% { opacity: .1; text-shadow: none; } 8% { opacity: 1; } 10% { opacity: .2; } 14% { opacity: 1; }
+  18% { opacity: .4; text-shadow: none; } 26% { opacity: 1; } 100% { opacity: 1; }
+}
+.glitch::before, .glitch::after {
+  content: attr(data-text); position: absolute; inset: 0; pointer-events: none;
+}
+.glitch::before { color: var(--cyan); transform: translate(-3px, 0); clip-path: inset(0 0 100% 0); animation: glitch-a 5s infinite steps(1); mix-blend-mode: screen; }
+.glitch::after { color: var(--magenta); transform: translate(3px, 0); clip-path: inset(100% 0 0 0); animation: glitch-b 5s infinite steps(1); mix-blend-mode: screen; }
+@keyframes glitch-a { 0%, 88%, 100% { clip-path: inset(0 0 100% 0); } 89% { clip-path: inset(10% 0 60% 0); } 91% { clip-path: inset(55% 0 20% 0); } 93% { clip-path: inset(30% 0 45% 0); } }
+@keyframes glitch-b { 0%, 88%, 100% { clip-path: inset(100% 0 0 0); } 90% { clip-path: inset(65% 0 10% 0); } 92% { clip-path: inset(15% 0 70% 0); } 94% { clip-path: inset(40% 0 35% 0); } }
+
+.hero-lede { margin-top: 22px; max-width: 34ch; font-size: var(--step-1); line-height: 1.4; color: var(--text); }
+.hero-lede strong { color: var(--yellow); font-weight: 600; }
+.hero-meta { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px 18px; font-family: var(--f-mono); font-size: .9rem; color: var(--dim); }
+.hero-meta span::before { content: "▸ "; color: var(--magenta); }
+
+.countdown { margin-top: 28px; display: flex; gap: 10px; flex-wrap: wrap; }
+.cd-cell {
+  min-width: 74px; padding: 10px 12px 8px; text-align: center;
+  background: rgba(18,11,34,0.82); border: 1px solid var(--line);
+}
+.cd-cell b { display: block; font-family: var(--f-mono); font-weight: 400; font-size: clamp(1.7rem, 7vw, 2.4rem); line-height: 1; color: var(--cyan); text-shadow: 0 0 10px rgba(5,217,232,0.6); font-variant-numeric: tabular-nums; }
+.cd-cell small { display: block; margin-top: 6px; font-family: var(--f-mono); font-size: .68rem; letter-spacing: .16em; color: var(--dim); text-transform: uppercase; }
+.cd-status { margin-top: 10px; font-family: var(--f-mono); font-size: .8rem; color: var(--dim); }
+
+.cta-row { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* ===================== BOUTONS ===================== */
+.btn {
+  --cut: 12px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 48px; padding: 12px 22px;
+  font-family: var(--f-head); font-weight: 700; font-size: 1rem; letter-spacing: .08em; text-transform: uppercase;
+  border: 0; cursor: pointer; text-decoration: none;
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+  transition: transform .12s ease, filter .12s ease, background .12s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--yellow); color: #0a0612; }
+.btn-primary:hover { color: #0a0612; filter: brightness(1.1); box-shadow: 0 0 0 0; }
+.btn-ghost { background: transparent; color: var(--cyan); box-shadow: inset 0 0 0 1px var(--cyan); clip-path: none; }
+.btn-ghost:hover { background: rgba(5,217,232,0.12); color: var(--cyan); }
+.btn-danger { background: transparent; color: var(--danger); box-shadow: inset 0 0 0 1px var(--danger); clip-path: none; }
+.btn-danger:hover { background: rgba(255,77,77,0.12); color: var(--danger); }
+.btn-danger.armed { background: var(--danger); color: #0a0612; }
+.btn-sm { min-height: 36px; padding: 6px 12px; font-size: .8rem; --cut: 8px; }
+.btn[disabled] { opacity: .55; cursor: progress; }
+
+/* ===================== SECTIONS ===================== */
+section.block { padding-block: clamp(56px, 9vw, 96px); border-bottom: 1px solid var(--line); }
+.sec-head { display: grid; gap: 10px; margin-bottom: 32px; }
+.sec-tag { font-family: var(--f-mono); font-size: .78rem; letter-spacing: .18em; color: var(--magenta); text-transform: uppercase; }
+.sec-head h2 { font-family: var(--f-head); font-weight: 700; font-size: var(--step-3); text-transform: uppercase; letter-spacing: .05em; line-height: 1.05; }
+.sec-head p { color: var(--dim); max-width: 62ch; }
+
+/* Panneau HUD : filet + crochets aux coins */
+.hud { position: relative; background: var(--panel); border: 1px solid var(--line); padding: 22px; }
+.hud::before, .hud::after { content: ""; position: absolute; width: 16px; height: 16px; pointer-events: none; }
+.hud::before { top: -1px; left: -1px; border-top: 2px solid var(--cyan); border-left: 2px solid var(--cyan); }
+.hud::after { bottom: -1px; right: -1px; border-bottom: 2px solid var(--cyan); border-right: 2px solid var(--cyan); }
+.hud.mag::before, .hud.mag::after { border-color: var(--magenta); }
+.hud.yel::before, .hud.yel::after { border-color: var(--yellow); }
+
+/* Briefing */
+.briefing { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.transmission { font-size: 1.06rem; display: grid; gap: 14px; max-width: 62ch; }
+.transmission .from { font-family: var(--f-mono); font-size: .8rem; color: var(--cyan); letter-spacing: .1em; }
+.transmission em { color: var(--yellow); font-style: normal; }
+.transmission .sign { font-family: var(--f-mono); color: var(--magenta); }
+.directives { display: grid; gap: 14px; }
+.directives h3 { font-family: var(--f-mono); font-weight: 400; font-size: .8rem; letter-spacing: .16em; color: var(--yellow); text-transform: uppercase; }
+.directives ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; counter-reset: d; }
+.directives li { counter-increment: d; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; }
+.directives li::before { content: "0" counter(d); font-family: var(--f-mono); color: var(--magenta); }
+.directives li b { color: var(--text); font-weight: 600; }
+.directives li span { color: var(--dim); }
+@media (max-width: 760px) { .briefing { grid-template-columns: 1fr; } }
+
+/* Programme */
+.timeline { display: grid; gap: 0; position: relative; }
+.phase { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 20px; position: relative; padding-bottom: 28px; }
+.phase:last-child { padding-bottom: 0; }
+.phase-time { font-family: var(--f-mono); text-align: right; padding-top: 18px; }
+.phase-time b { display: block; font-weight: 400; font-size: 2rem; line-height: 1; color: var(--text); font-variant-numeric: tabular-nums; }
+.phase-time span { display: block; margin-top: 6px; font-size: .75rem; letter-spacing: .14em; color: var(--magenta); }
+.phase .hud { display: grid; gap: 12px; }
+.phase-top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; justify-content: space-between; }
+.phase h3 { font-family: var(--f-head); font-weight: 700; font-size: var(--step-2); text-transform: uppercase; letter-spacing: .04em; line-height: 1.1; }
+.phase .kind { font-family: var(--f-mono); font-size: .8rem; color: var(--cyan); letter-spacing: .1em; text-transform: uppercase; }
+.venue { display: grid; gap: 2px; }
+.venue strong { font-weight: 600; font-size: 1.05rem; }
+.venue span { color: var(--dim); font-family: var(--f-mono); font-size: .9rem; }
+.phase-desc { color: var(--dim); max-width: 60ch; }
+.phase-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; justify-content: space-between; padding-top: 10px; border-top: 1px dashed var(--line); }
+.phase-foot .count { font-family: var(--f-mono); font-size: .9rem; color: var(--text); }
+.phase-foot .count b { color: var(--cyan); font-weight: 400; font-size: 1.2rem; font-variant-numeric: tabular-nums; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--f-mono); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+  padding: 3px 8px; border: 1px solid currentColor; white-space: nowrap;
+}
+.chip.ok { color: var(--ok); }
+.chip.wait { color: var(--yellow); }
+.interlude { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 20px; padding-bottom: 28px; font-family: var(--f-mono); font-size: .85rem; color: var(--dim); }
+.interlude span:first-child { text-align: right; }
+.interlude span:last-child { border-left: 1px dashed var(--line); padding-left: 14px; }
+@media (max-width: 600px) {
+  .phase, .interlude { grid-template-columns: 1fr; gap: 8px; }
+  .phase-time { text-align: left; padding-top: 0; display: flex; align-items: baseline; gap: 12px; }
+  .phase-time span { margin-top: 0; }
+  .interlude span:first-child { text-align: left; }
+}
+
+/* Dress code */
+.dress-intro { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 20px; margin-bottom: 20px; align-items: stretch; }
+.alert {
+  background: repeating-linear-gradient(-45deg, rgba(249,240,2,0.08) 0 10px, transparent 10px 20px), var(--panel);
+  border: 1px solid var(--yellow); padding: 20px; display: grid; gap: 8px; align-content: center;
+}
+.alert h3 { font-family: var(--f-head); font-weight: 700; text-transform: uppercase; color: var(--yellow); font-size: var(--step-1); letter-spacing: .06em; }
+.alert p { color: var(--text); }
+.palette { display: grid; gap: 10px; align-content: start; }
+.palette h3 { font-family: var(--f-mono); font-weight: 400; font-size: .8rem; letter-spacing: .16em; color: var(--dim); text-transform: uppercase; }
+.swatches { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.sw { display: grid; gap: 6px; font-family: var(--f-mono); font-size: .7rem; color: var(--dim); text-transform: uppercase; letter-spacing: .06em; }
+.sw i { display: block; aspect-ratio: 1; max-width: 100%; border: 1px solid var(--line); }
+.levels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.level { display: grid; gap: 12px; align-content: start; }
+.level .lv { font-family: var(--f-mono); font-size: .78rem; letter-spacing: .14em; color: var(--cyan); text-transform: uppercase; }
+.level h3 { font-family: var(--f-head); font-weight: 700; font-size: var(--step-1); text-transform: uppercase; letter-spacing: .04em; }
+.meter { display: flex; gap: 4px; }
+.meter i { height: 6px; flex: 1; background: var(--line); }
+.meter i.on { background: var(--magenta); box-shadow: 0 0 8px rgba(255,42,109,0.7); }
+.level ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; color: var(--dim); font-size: .95rem; }
+.level li { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 8px; }
+.level li::before { content: "+"; color: var(--magenta); font-family: var(--f-mono); }
+.tips { margin-top: 20px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.tip { border-top: 1px solid var(--line); padding-top: 12px; display: grid; gap: 4px; }
+.tip b { font-family: var(--f-mono); font-weight: 400; font-size: .8rem; letter-spacing: .12em; color: var(--yellow); text-transform: uppercase; }
+.tip span { color: var(--dim); font-size: .95rem; }
+@media (max-width: 760px) {
+  .dress-intro, .levels, .tips { grid-template-columns: 1fr; }
+}
+
+/* ===================== ENRÔLEMENT ===================== */
+.enrol-grid { display: grid; gap: 20px; }
+.mine {
+  border: 1px solid var(--ok); background: rgba(57,255,156,0.06); padding: 16px 18px;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+}
+.mine p { font-family: var(--f-mono); font-size: .9rem; color: var(--ok); }
+.mine p span { color: var(--text); }
+.mine .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+form#enrol { display: grid; gap: 16px; }
+.form-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px; }
+.form-head h3 { font-family: var(--f-head); font-weight: 700; font-size: var(--step-1); text-transform: uppercase; letter-spacing: .05em; }
+.form-head .mode { font-family: var(--f-mono); font-size: .78rem; color: var(--cyan); letter-spacing: .12em; text-transform: uppercase; }
+.edit-warn { font-family: var(--f-mono); font-size: .85rem; color: var(--yellow); border-left: 2px solid var(--yellow); padding: 4px 0 4px 12px; }
+.members { display: grid; gap: 14px; }
+.member { background: var(--panel-2); border: 1px solid var(--line); padding: 16px; display: grid; gap: 14px; }
+.member-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.member-head span { font-family: var(--f-mono); font-size: .8rem; letter-spacing: .14em; color: var(--magenta); text-transform: uppercase; }
+.icon-btn {
+  background: transparent; border: 1px solid var(--line); color: var(--dim); cursor: pointer;
+  font-family: var(--f-mono); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; padding: 6px 10px; min-height: 32px;
+}
+.icon-btn:hover { color: var(--danger); border-color: var(--danger); }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.field { display: grid; gap: 6px; }
+.field label { font-family: var(--f-mono); font-size: .75rem; letter-spacing: .14em; color: var(--dim); text-transform: uppercase; }
+.field input {
+  width: 100%; min-width: 0; min-height: 46px; padding: 10px 12px;
+  background: var(--void); color: var(--text); border: 1px solid var(--line); border-radius: 0;
+  font-family: var(--f-body); font-size: 1rem;
+}
+.field input:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 0 1px var(--cyan), 0 0 14px rgba(5,217,232,0.25); }
+.field input[aria-invalid="true"] { border-color: var(--danger); }
+.phases-pick { border: 0; margin: 0; padding: 0; display: grid; gap: 8px; min-width: 0; }
+.phases-pick legend { font-family: var(--f-mono); font-size: .75rem; letter-spacing: .14em; color: var(--dim); text-transform: uppercase; padding: 0; margin-bottom: 8px; display: flex; gap: 10px; align-items: center; justify-content: space-between; width: 100%; }
+.phases-pick legend button { background: none; border: 0; color: var(--cyan); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; padding: 4px 0; text-decoration: underline; text-underline-offset: 3px; }
+.picks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.pick { position: relative; }
+.pick input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.pick label {
+  display: grid; gap: 2px; padding: 10px 12px 10px 38px; min-height: 58px; align-content: center;
+  border: 1px solid var(--line); background: var(--void); cursor: pointer; position: relative;
+  transition: border-color .12s, background .12s;
+}
+.pick label::before {
+  content: ""; position: absolute; left: 12px; top: 50%; width: 16px; height: 16px; transform: translateY(-50%);
+  border: 1px solid var(--dim);
+}
+.pick label b { font-family: var(--f-head); font-weight: 600; font-size: .95rem; text-transform: uppercase; letter-spacing: .04em; color: var(--text); }
+.pick label small { font-family: var(--f-mono); font-size: .75rem; color: var(--dim); }
+.pick input:checked + label { border-color: var(--cyan); background: rgba(5,217,232,0.1); }
+.pick input:checked + label::before { background: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+.pick input:checked + label::after {
+  content: ""; position: absolute; left: 17px; top: 50%; width: 5px; height: 9px; transform: translateY(-65%) rotate(45deg);
+  border-right: 2px solid var(--void); border-bottom: 2px solid var(--void);
+}
+.pick input:focus-visible + label { outline: 2px solid var(--yellow); outline-offset: 2px; }
+.member.invalid .picks .pick label { border-color: rgba(255,77,77,0.6); }
+@media (max-width: 600px) {
+  .fields { grid-template-columns: 1fr; }
+  .picks { grid-template-columns: 1fr; }
+}
+.add-member {
+  width: 100%; min-height: 52px; background: transparent; border: 1px dashed var(--cyan); color: var(--cyan);
+  font-family: var(--f-head); font-weight: 600; font-size: .95rem; letter-spacing: .08em; text-transform: uppercase; cursor: pointer;
+}
+.add-member:hover { background: rgba(5,217,232,0.08); }
+.form-msg { font-family: var(--f-mono); font-size: .9rem; padding: 10px 12px; border-left: 2px solid currentColor; }
+.form-msg.err { color: var(--danger); background: rgba(255,77,77,0.08); }
+.form-msg.info { color: var(--cyan); background: rgba(5,217,232,0.06); }
+.form-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.form-actions .spacer { flex: 1; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.success { display: grid; gap: 14px; text-align: left; }
+.success .big { font-family: var(--f-head); font-weight: 700; font-size: var(--step-2); text-transform: uppercase; color: var(--ok); letter-spacing: .05em; text-shadow: 0 0 14px rgba(57,255,156,0.45); }
+.success ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; font-family: var(--f-mono); font-size: .92rem; }
+.success .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* ===================== REGISTRE ===================== */
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 20px; }
+.stat { background: var(--panel); border: 1px solid var(--line); padding: 14px 16px; display: grid; gap: 4px; }
+.stat small { font-family: var(--f-mono); font-size: .72rem; letter-spacing: .14em; color: var(--dim); text-transform: uppercase; }
+.stat b { font-family: var(--f-mono); font-weight: 400; font-size: 2rem; line-height: 1; color: var(--cyan); font-variant-numeric: tabular-nums; }
+.stat.total b { color: var(--magenta); }
+@media (max-width: 680px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.reg-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }
+.filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.filter {
+  background: transparent; border: 1px solid var(--line); color: var(--dim); cursor: pointer;
+  font-family: var(--f-mono); font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; padding: 8px 12px; min-height: 38px;
+}
+.filter[aria-pressed="true"] { border-color: var(--magenta); color: var(--text); background: rgba(255,42,109,0.12); }
+.search { flex: 1; min-width: 0; }
+.search input {
+  width: 100%; min-height: 38px; padding: 8px 12px; background: var(--void); color: var(--text);
+  border: 1px solid var(--line); font-family: var(--f-mono); font-size: .9rem; border-radius: 0;
+}
+.search input:focus { outline: none; border-color: var(--cyan); }
+.reg-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 700px) { .reg-list { grid-template-columns: 1fr; } }
+.crew { background: var(--panel); border: 1px solid var(--line); padding: 14px 16px; display: grid; gap: 10px; align-content: start; }
+.crew.is-mine { border-color: var(--ok); }
+.crew-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.crew-head span { font-family: var(--f-mono); font-size: .75rem; letter-spacing: .12em; color: var(--dim); text-transform: uppercase; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.crew-head .mine-tag { color: var(--ok); }
+.crew ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.crew li { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.crew li .name { font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
+.tags { display: flex; gap: 4px; flex-shrink: 0; }
+.tag { font-family: var(--f-mono); font-size: .68rem; letter-spacing: .06em; padding: 2px 6px; border: 1px solid var(--line); color: var(--line); }
+.tag.on { color: var(--cyan); border-color: var(--cyan); }
+.reg-empty, .reg-state { font-family: var(--f-mono); color: var(--dim); padding: 28px 18px; text-align: center; border: 1px dashed var(--line); grid-column: 1 / -1; display: grid; gap: 12px; justify-items: center; }
+.legend { margin-top: 14px; font-family: var(--f-mono); font-size: .78rem; color: var(--dim); }
+
+/* ===================== FAQ ===================== */
+.faq { display: grid; gap: 8px; }
+.faq details { background: var(--panel); border: 1px solid var(--line); }
+.faq summary {
+  list-style: none; cursor: pointer; padding: 16px 48px 16px 18px; position: relative;
+  font-family: var(--f-head); font-weight: 600; font-size: 1.05rem;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-family: var(--f-mono); color: var(--magenta); font-size: 1.3rem; }
+.faq details[open] summary::after { content: "−"; }
+.faq details[open] { border-color: var(--magenta); }
+.faq .ans { padding: 0 18px 18px; color: var(--dim); max-width: 66ch; display: grid; gap: 8px; }
+.faq .ans b { color: var(--text); font-weight: 600; }
+
+/* ===================== FOOTER / TOAST ===================== */
+footer { padding-block: 40px calc(40px + env(safe-area-inset-bottom, 0px)); font-family: var(--f-mono); font-size: .8rem; color: var(--dim); }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; }
+footer b { color: var(--magenta); font-weight: 400; }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 20px);
+  z-index: 70; max-width: calc(100% - 32px); width: max-content;
+  background: var(--panel-2); border: 1px solid var(--ok); color: var(--ok);
+  font-family: var(--f-mono); font-size: .9rem; padding: 12px 16px;
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.err { border-color: var(--danger); color: var(--danger); }
+
+.mobile-cta {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 45;
+  padding: 10px var(--gutter-r) calc(10px + env(safe-area-inset-bottom, 0px)) var(--gutter-l);
+  background: rgba(10,6,18,0.94); border-top: 1px solid var(--line);
+  transform: translateY(110%); transition: transform .25s ease;
+}
+.mobile-cta .btn { width: 100%; }
+.mobile-cta.show { transform: none; }
+@media (min-width: 721px) { .mobile-cta { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .glitch::before, .glitch::after { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== ÉCRAN DE BOOT ===================== -->
+<div id="boot" role="presentation" hidden>
+  <pre id="boot-text"></pre>
+  <div class="skip">[ TOUCHER POUR PASSER ]</div>
+</div>
+
+<div id="demo-banner" class="demo-banner" hidden>
+  <span>MODE DÉMO // inscriptions fictives enregistrées sur cet appareil uniquement</span>
+</div>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top">C<b>//</b>3030</a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#briefing">Briefing</a>
+      <a href="#programme">Programme</a>
+      <a href="#dresscode">Dress code</a>
+      <a href="#enrolement">Enrôlement</a>
+      <a href="#registre">Runners</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="live" aria-live="polite"><span id="live-count" class="tnum">--</span>&nbsp;runners enrôlés</div>
+  </div>
+</header>
+
+<main id="top">
+  <!-- ===================== HERO ===================== -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-bg" aria-hidden="true">
+      <canvas id="skyline"></canvas>
+      <div class="floor"></div>
+    </div>
+    <div class="wrap">
+      <p class="eyebrow"><span class="red">■</span> Transmission cryptée // Néo-Paris, secteur 11</p>
+      <h1 id="hero-title">
+        <span class="word glitch" data-text="Cyberpunk">Cyberpunk</span>
+        <span class="num">3030</span>
+      </h1>
+      <p class="hero-lede">Hugo passe en <strong>version 3.0</strong>. Une journée, trois opérations, un seul dress code : le futur.</p>
+      <div class="hero-meta">
+        <span id="meta-date">Samedi 9 janvier 2027</span>
+        <span>Paris 11e</span>
+        <span>11h → tard</span>
+      </div>
+      <div class="countdown" id="countdown" aria-label="Compte à rebours avant le début de la mission">
+        <div class="cd-cell"><b id="cd-d">--</b><small>jours</small></div>
+        <div class="cd-cell"><b id="cd-h">--</b><small>heures</small></div>
+        <div class="cd-cell"><b id="cd-m">--</b><small>min</small></div>
+        <div class="cd-cell"><b id="cd-s">--</b><small>sec</small></div>
+      </div>
+      <p class="cd-status" id="cd-status">Avant le lancement de la Phase 01</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#enrolement">S'enrôler maintenant</a>
+        <a class="btn btn-ghost" href="#programme">Voir la mission</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== BRIEFING ===================== -->
+  <section class="block" id="briefing" aria-labelledby="briefing-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="sec-tag">// Message entrant</p>
+        <h2 id="briefing-title">Briefing de mission</h2>
+      </div>
+      <div class="briefing">
+        <div class="hud transmission">
+          <p class="from">DE : H.GRANVILLE // À : TOI, RUNNER // OBJET : RECRUTEMENT</p>
+          <p>Runner,</p>
+          <p>Le 9 janvier 3030, je termine ma troisième décennie dans les rues de Néo-Paris. Le Réseau m'a autorisé à constituer une crew pour marquer le coup, et ton nom est remonté dans les fichiers.</p>
+          <p>Au programme : une opération tactique sous les lasers, un ravitaillement en équipe, puis une nuit en <em>overdrive</em> au bar avec DJ set jusqu'à extinction des néons.</p>
+          <p>Viens à une phase, à deux, ou à toute la mission. Mais viens <em>déguisé</em> : les civils seront repérés.</p>
+          <p class="sign">// Fin de transmission. Ce message ne s'autodétruira pas.</p>
+        </div>
+        <div class="hud mag directives">
+          <h3>Directives</h3>
+          <ol>
+            <li><div><b>Enrôle-toi aujourd'hui.</b> <span>Les lieux se réservent sur la base des inscrits. Tu pourras modifier tes choix plus tard.</span></div></li>
+            <li><div><b>Choisis tes phases.</b> <span>Laser, déjeuner, soirée : coche celles où tu seras là.</span></div></li>
+            <li><div><b>Ajoute ta crew.</b> <span>Ton ou ta +1, tes potes : inscris-les dans le même formulaire.</span></div></li>
+            <li><div><b>Prépare ton costume.</b> <span>Le meilleur look de la soirée sera récompensé.</span></div></li>
+          </ol>
+          <a class="btn btn-primary" href="#enrolement">S'enrôler</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROGRAMME ===================== -->
+  <section class="block" id="programme" aria-labelledby="programme-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="sec-tag">// Déroulé des opérations</p>
+        <h2 id="programme-title">Programme</h2>
+        <p>Samedi 9 janvier 2027, tout dans le 11e. Chacun règle sa part sur place.</p>
+      </div>
+      <div class="timeline" id="timeline"></div>
+    </div>
+  </section>
+
+  <!-- ===================== DRESS CODE ===================== -->
+  <section class="block" id="dresscode" aria-labelledby="dress-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="sec-tag">// Protocole visuel</p>
+        <h2 id="dress-title">Dress code</h2>
+        <p>Rétro-futurisme, néons, chrome, cuir et circuits imprimés. Pas besoin de budget : il faut juste jouer le jeu.</p>
+      </div>
+      <div class="dress-intro">
+        <div class="alert">
+          <h3>⚠ Déguisement fortement recommandé</h3>
+          <p>Un runner en civil se fait remarquer. Le meilleur costume de la journée sera récompensé pendant la soirée.</p>
+        </div>
+        <div class="palette">
+          <h3>Palette autorisée</h3>
+          <div class="swatches">
+            <div class="sw"><i style="background:#000"></i>Noir</div>
+            <div class="sw"><i style="background:var(--magenta)"></i>Néon rose</div>
+            <div class="sw"><i style="background:var(--cyan)"></i>Cyan</div>
+            <div class="sw"><i style="background:linear-gradient(135deg,#f4f4f8,#8a8aa0 45%,#e9e9f2 55%,#5a5a70)"></i>Chrome</div>
+            <div class="sw"><i style="background:var(--yellow)"></i>Jaune</div>
+          </div>
+        </div>
+      </div>
+      <div class="levels">
+        <div class="hud level">
+          <p class="lv">Niveau 1 // Effort minimum</p>
+          <h3>Civil infiltré</h3>
+          <div class="meter" aria-label="Intensité 1 sur 3"><i class="on"></i><i></i><i></i></div>
+          <ul>
+            <li>Tenue toute noire</li>
+            <li>Un accessoire lumineux : bracelet LED, lunettes fluo</li>
+            <li>Un trait de maquillage néon sous l'œil</li>
+          </ul>
+        </div>
+        <div class="hud mag level">
+          <p class="lv">Niveau 2 // Runner</p>
+          <h3>Street samurai</h3>
+          <div class="meter" aria-label="Intensité 2 sur 3"><i class="on"></i><i class="on"></i><i></i></div>
+          <ul>
+            <li>Veste en cuir, vinyle ou métallisée</li>
+            <li>Cheveux colorés à la bombe, mèches fluo</li>
+            <li>Lunettes futuristes ou visière</li>
+            <li>Rubans LED ou bandes réfléchissantes</li>
+          </ul>
+        </div>
+        <div class="hud yel level">
+          <p class="lv">Niveau 3 // Full chrome</p>
+          <h3>Cyborg intégral</h3>
+          <div class="meter" aria-label="Intensité 3 sur 3"><i class="on"></i><i class="on"></i><i class="on"></i></div>
+          <ul>
+            <li>Implants : maquillage circuits, prothèses en carton argenté</li>
+            <li>Perruque néon, lentilles, tenue holographique</li>
+            <li>Gants, harnais, câbles qui dépassent</li>
+            <li>Tu clignotes dans le noir</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tips">
+        <div class="tip"><b>Où trouver</b><span>Friperies, bazars, rayons déco de Noël (guirlandes LED à piles), magasins de déguisement.</span></div>
+        <div class="tip"><b>Astuce</b><span>Du scotch métallisé et du carton suffisent pour un implant convaincant.</span></div>
+        <div class="tip"><b>Pense pratique</b><span>Le laser game se joue en mouvement : garde le costume complet pour le soir si besoin.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ENRÔLEMENT ===================== -->
+  <section class="block" id="enrolement" aria-labelledby="enrol-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="sec-tag">// Fiche d'enrôlement</p>
+        <h2 id="enrol-title">Enrôlement</h2>
+        <p>Inscris-toi, ajoute les personnes qui viennent avec toi, et coche les phases de chacun. Modifiable à tout moment, depuis n'importe quel appareil, via le registre.</p>
+      </div>
+
+      <div class="enrol-grid">
+        <div id="mine" class="mine" hidden></div>
+
+        <div class="hud" id="enrol-panel">
+          <form id="enrol" novalidate>
+            <div class="form-head">
+              <h3 id="form-title">Nouvel enrôlement</h3>
+              <span class="mode" id="form-mode">Création</span>
+            </div>
+            <p class="edit-warn" id="edit-warn" hidden></p>
+            <div class="members" id="members"></div>
+            <button type="button" class="add-member" id="add-member">+ Ajouter une personne à ma crew</button>
+            <div class="hp" aria-hidden="true">
+              <label for="website">Ne pas remplir</label>
+              <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+            </div>
+            <p class="form-msg err" id="form-err" role="alert" hidden></p>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" id="submit-btn">Transmettre l'enrôlement</button>
+              <button type="button" class="btn btn-ghost" id="cancel-edit" hidden>Annuler</button>
+              <span class="spacer"></span>
+              <button type="button" class="btn btn-danger btn-sm" id="delete-btn" hidden>Supprimer l'inscription</button>
+            </div>
+          </form>
+
+          <div class="success" id="success" hidden>
+            <p class="big" id="success-title">Enrôlement confirmé</p>
+            <ul id="success-list"></ul>
+            <p class="mono" style="color:var(--dim);font-size:.85rem">Cet appareil se souvient de ton enrôlement. Depuis un autre appareil, retrouve ton nom dans le registre ci-dessous.</p>
+            <div class="actions">
+              <button type="button" class="btn btn-ghost btn-sm" id="success-edit">Modifier</button>
+              <button type="button" class="btn btn-ghost btn-sm" id="success-new">Inscrire une autre crew</button>
+              <a class="btn btn-ghost btn-sm" href="#registre">Voir le registre</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== REGISTRE ===================== -->
+  <section class="block" id="registre" aria-labelledby="reg-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="sec-tag">// Base de données du Réseau</p>
+        <h2 id="reg-title">Registre des runners</h2>
+        <p>Qui vient, et à quoi. Pour modifier une inscription faite sur un autre appareil, retrouve ton nom ici et touche « Modifier ».</p>
+      </div>
+      <div class="stats" id="stats"></div>
+      <div class="reg-tools">
+        <div class="filters" role="group" aria-label="Filtrer par phase" id="filters"></div>
+        <div class="search">
+          <label class="sr-only" for="reg-search">Rechercher un nom</label>
+          <input type="search" id="reg-search" placeholder="Rechercher un nom…" autocomplete="off">
+        </div>
+      </div>
+      <div class="reg-list" id="reg-list">
+        <div class="reg-state">Synchronisation avec le Réseau…</div>
+      </div>
+      <p class="legend" id="legend"></p>
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ===================== -->
+  <section class="block" id="faq" aria-labelledby="faq-title">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="sec-tag">// Requêtes fréquentes</p>
+        <h2 id="faq-title">FAQ</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>Je dois venir à toute la journée ?</summary>
+          <div class="ans"><p>Non. Choisis les phases qui t'arrangent : laser, déjeuner, soirée, ou n'importe quelle combinaison. Coche simplement les bonnes cases.</p></div>
+        </details>
+        <details>
+          <summary>Combien ça coûte ?</summary>
+          <div class="ans"><p>Chacun règle sa part sur place (laser game, repas, consos). Hugo prend en charge une partie, notamment au bar le soir.</p></div>
+        </details>
+        <details>
+          <summary>Je peux venir accompagné(e) ?</summary>
+          <div class="ans"><p>Oui. Dans le formulaire, touche <b>« Ajouter une personne à ma crew »</b> et coche ses phases. Chaque personne compte pour les réservations.</p></div>
+        </details>
+        <details>
+          <summary>Je ne suis pas encore sûr(e), je m'inscris quand même ?</summary>
+          <div class="ans"><p>Oui, et le plus tôt possible : les réservations se font sur la base des inscrits. Coche ce qui est probable aujourd'hui, tu pourras décocher plus tard.</p></div>
+        </details>
+        <details>
+          <summary>Comment modifier ou annuler mon inscription ?</summary>
+          <div class="ans"><p>Sur l'appareil qui a servi à t'inscrire, un encadré vert en haut du formulaire te propose de modifier. Sinon, retrouve ton nom dans le <a href="#registre">registre</a> et touche <b>« Modifier »</b>. Tu peux cocher, décocher, ajouter ou retirer quelqu'un, ou supprimer l'inscription.</p></div>
+        </details>
+        <details>
+          <summary>Le déguisement est obligatoire ?</summary>
+          <div class="ans"><p>Fortement recommandé. Même un seul accessoire lumineux fait l'affaire. Regarde le <a href="#dresscode">dress code</a> pour des idées à tous les niveaux d'effort.</p></div>
+        </details>
+        <details>
+          <summary>Il y a une pause entre le déjeuner et la soirée ?</summary>
+          <div class="ans"><p>Oui, l'après-midi est libre entre la fin du déjeuner et 19h : idéal pour finaliser ton costume.</p></div>
+        </details>
+        <details>
+          <summary>J'ai une autre question</summary>
+          <div class="ans"><p>Écris directement à Hugo.</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 3030 <b>Corpo Granville</b> // Hugo v3.0</span>
+    <span>Transmission terminée_</span>
+  </div>
+</footer>
+
+<div class="mobile-cta" id="mobile-cta"><a class="btn btn-primary" href="#enrolement">S'enrôler maintenant</a></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =====================================================================
+   CONFIGURATION : tout ce qui est susceptible de changer est ici.
+   ===================================================================== */
+const CONFIG = {
+  // URL du déploiement Apps Script (finit par /exec). Vide = mode démo (données locales fictives).
+  apiUrl: "",
+
+  // Début de la mission (heure de Paris) : sert au compte à rebours.
+  start: "2027-01-09T11:00:00+01:00",
+  end:   "2027-01-10T04:00:00+01:00",
+
+  phases: [
+    {
+      key: "laser",
+      code: "Phase 01",
+      time: "11:00",
+      short: "Laser",
+      title: "Opération Neon Strike",
+      kind: "Laser game",
+      venue: "Urban Laser Paris 11",
+      address: "160 rue Saint-Maur, 75011 Paris",
+      status: "ok",              // "ok" = lieu confirmé, "wait" = à confirmer
+      statusLabel: "Lieu confirmé",
+      desc: "Briefing tactique, équipes tirées au sort, et que la meilleure crew gagne. Arrive à l'heure : les parties s'enchaînent."
+    },
+    {
+      key: "dejeuner",
+      code: "Phase 02",
+      time: "14:00",
+      short: "Déjeuner",
+      title: "Ravitaillement",
+      kind: "Déjeuner au resto",
+      venue: "Lieu en cours de sélection",
+      address: "Coordonnées transmises très bientôt",
+      status: "wait",
+      statusLabel: "À confirmer",
+      desc: "On recharge les batteries ensemble après l'opération. Le lieu sera annoncé ici dès qu'il est réservé."
+    },
+    {
+      key: "soiree",
+      code: "Phase 03",
+      time: "19:00",
+      short: "Soirée",
+      title: "Overdrive",
+      kind: "Bar + DJ set",
+      venue: "La Morézienne",
+      address: "13 rue Marguerite Moret, 75011 Paris",
+      status: "wait",
+      statusLabel: "À confirmer",
+      desc: "Néons, DJ set et tournées. Hugo prend en charge une partie des consos. Remise du prix du meilleur costume."
+    }
+  ],
+
+  interludes: { soiree: { time: "16:00", text: "Temps libre // recharge, finitions du costume" } },
+
+  maxMembers: 10
+};
+
+/* =====================================================================
+   OUTILS
+   ===================================================================== */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const norm = (v) => String(v || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const store = {
+  get(k, fallback) { try { const v = localStorage.getItem(k); return v === null ? fallback : JSON.parse(v); } catch (e) { return fallback; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const PHASES = CONFIG.phases;
+const DEMO = !CONFIG.apiUrl;
+
+function toast(msg, isErr) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.toggle("err", !!isErr);
+  t.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.classList.remove("show"), 3800);
+}
+
+/* =====================================================================
+   API (Apps Script) ou mode démo local
+   ===================================================================== */
+const DEMO_KEY = "c3030-demo-db";
+function demoDb() {
+  let db = store.get(DEMO_KEY, null);
+  if (!db) {
+    const now = Date.now();
+    const mk = (id, mins, members) => ({ id, createdAt: new Date(now - mins * 60000).toISOString(), updatedAt: new Date(now - mins * 60000).toISOString(), members });
+    db = [
+      mk("demo01", 300, [{ prenom: "Exemple", nom: "Runner", laser: true, dejeuner: true, soiree: true }, { prenom: "Exemple", nom: "Plus-Un", laser: false, dejeuner: true, soiree: true }]),
+      mk("demo02", 120, [{ prenom: "Fictif", nom: "Netrunner", laser: true, dejeuner: false, soiree: true }]),
+      mk("demo03", 30, [{ prenom: "Démo", nom: "Chrome", laser: false, dejeuner: false, soiree: true }, { prenom: "Démo", nom: "Néon", laser: false, dejeuner: false, soiree: true }, { prenom: "Démo", nom: "Glitch", laser: true, dejeuner: true, soiree: true }])
+    ];
+    store.set(DEMO_KEY, db);
+  }
+  return db;
+}
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+const api = {
+  async list() {
+    if (DEMO) { await wait(250); return demoDb(); }
+    const res = await fetch(CONFIG.apiUrl + "?t=" + Date.now(), { method: "GET", redirect: "follow" });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || "Erreur du serveur.");
+    return data.groups;
+  },
+  async post(payload) {
+    if (DEMO) {
+      await wait(450);
+      let db = demoDb();
+      const now = new Date().toISOString();
+      if (payload.action === "save") {
+        const g = payload.group;
+        if (g.id) {
+          const i = db.findIndex((x) => x.id === g.id);
+          if (i < 0) throw new Error("Cette inscription n'existe plus. Recharge la page.");
+          db[i] = { ...db[i], members: g.members, updatedAt: now };
+        } else {
+          g.id = Math.random().toString(16).slice(2, 10);
+          db.push({ id: g.id, createdAt: now, updatedAt: now, members: g.members });
+        }
+        store.set(DEMO_KEY, db);
+        return { groups: db, groupId: g.id };
+      }
+      if (payload.action === "delete") {
+        db = db.filter((x) => x.id !== payload.groupId);
+        store.set(DEMO_KEY, db);
+        return { groups: db, groupId: payload.groupId };
+      }
+    }
+    // Content-Type text/plain : requête "simple", pas de pré-vol CORS côté Apps Script.
+    const res = await fetch(CONFIG.apiUrl, { method: "POST", body: JSON.stringify(payload), redirect: "follow" });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || "Erreur du serveur.");
+    return data;
+  }
+};
+
+/* =====================================================================
+   ÉTAT
+   ===================================================================== */
+const state = {
+  groups: [],
+  loaded: false,
+  loadError: null,
+  mine: store.get("c3030-mine", []),
+  editingId: null,
+  draft: [],
+  filter: "all",
+  query: "",
+  busy: false
+};
+const isMine = (id) => state.mine.includes(id);
+function remember(id) { if (!isMine(id)) { state.mine.push(id); store.set("c3030-mine", state.mine); } }
+function forget(id) { state.mine = state.mine.filter((x) => x !== id); store.set("c3030-mine", state.mine); }
+const blankMember = (copyFrom) => {
+  const m = { prenom: "", nom: "" };
+  PHASES.forEach((p) => { m[p.key] = copyFrom ? !!copyFrom[p.key] : false; });
+  return m;
+};
+const displayName = (m) => `${m.prenom} ${m.nom}`.trim();
+
+/* =====================================================================
+   BOOT
+   ===================================================================== */
+function runBoot() {
+  const boot = $("#boot");
+  if (reducedMotion || store.get("c3030-booted", false)) return;
+  boot.hidden = false;
+  const lines = [
+    "> NEO-PARIS NET // NŒUD 75011",
+    "> Connexion via lien direct.............. OK",
+    "> Décryptage de la transmission.......... OK",
+    "> Profil détecté : RUNNER POTENTIEL",
+    "> Chargement de la mission CYBERPUNK 3030",
+    "",
+    "ACCÈS AUTORISÉ"
+  ];
+  const pre = $("#boot-text");
+  let i = 0, stopped = false;
+  const finish = () => {
+    if (stopped) return;
+    stopped = true;
+    store.set("c3030-booted", true);
+    boot.classList.add("done");
+    setTimeout(() => { boot.hidden = true; }, 450);
+  };
+  boot.addEventListener("click", finish);
+  document.addEventListener("keydown", finish, { once: true });
+  const step = () => {
+    if (stopped) return;
+    if (i >= lines.length) { setTimeout(finish, 700); return; }
+    const text = lines.slice(0, i + 1).map((l, idx) => idx === lines.length - 1 && l ? `<span class="granted">${esc(l)}</span>` : esc(l)).join("\n");
+    pre.innerHTML = text + ' <span class="caret"></span>';
+    i++;
+    setTimeout(step, i === lines.length ? 500 : 280);
+  };
+  step();
+}
+
+/* =====================================================================
+   HERO : skyline + compte à rebours
+   ===================================================================== */
+function drawSkyline() {
+  const c = $("#skyline");
+  if (!c) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = c.clientWidth, h = c.clientHeight;
+  if (!w || !h) return;
+  c.width = w * dpr; c.height = h * dpr;
+  const ctx = c.getContext("2d");
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, w, h);
+  let seed = 3030;
+  const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  // Deux plans d'immeubles : lointain (violet) puis proche (noir).
+  [[0.55, "#1d1236", 0.2], [1, "#07040d", 0.45]].forEach(([scale, color, winRate]) => {
+    let x = -10;
+    while (x < w + 10) {
+      const bw = 26 + rnd() * 60;
+      const bh = h * (0.25 + rnd() * 0.7) * scale;
+      ctx.fillStyle = color;
+      ctx.fillRect(x, h - bh, bw, bh);
+      if (rnd() > 0.7) ctx.fillRect(x + bw / 2 - 1, h - bh - 18 * scale, 2, 18 * scale); // antenne
+      for (let wy = h - bh + 8; wy < h - 6; wy += 9) {
+        for (let wx = x + 5; wx < x + bw - 5; wx += 7) {
+          if (rnd() < winRate * 0.35) {
+            const r = rnd();
+            ctx.fillStyle = r < 0.5 ? "rgba(5,217,232,0.75)" : r < 0.85 ? "rgba(255,42,109,0.75)" : "rgba(249,240,2,0.8)";
+            ctx.fillRect(wx, wy, 3, 4);
+          }
+        }
+      }
+      x += bw + 2 + rnd() * 6;
+    }
+  });
+}
+
+function tickCountdown() {
+  const start = new Date(CONFIG.start).getTime();
+  const end = new Date(CONFIG.end).getTime();
+  const now = Date.now();
+  let diff = Math.max(0, start - now);
+  const d = Math.floor(diff / 86400000); diff -= d * 86400000;
+  const h = Math.floor(diff / 3600000); diff -= h * 3600000;
+  const m = Math.floor(diff / 60000); diff -= m * 60000;
+  const s = Math.floor(diff / 1000);
+  const pad = (n) => String(n).padStart(2, "0");
+  $("#cd-d").textContent = d; $("#cd-h").textContent = pad(h); $("#cd-m").textContent = pad(m); $("#cd-s").textContent = pad(s);
+  $("#cd-status").textContent = now < start ? "Avant le lancement de la Phase 01" : now < end ? "Mission en cours" : "Mission accomplie. Merci runners.";
+}
+
+/* =====================================================================
+   PROGRAMME
+   ===================================================================== */
+function renderTimeline() {
+  const counts = phaseCounts();
+  const html = PHASES.map((p) => {
+    const inter = CONFIG.interludes[p.key];
+    const maps = p.status === "ok" || /\d/.test(p.address)
+      ? `<a class="btn btn-ghost btn-sm" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.venue + ", " + p.address)}" target="_blank" rel="noopener">Itinéraire ↗</a>`
+      : "";
+    return `${inter ? `<div class="interlude"><span>${esc(inter.time)}</span><span>${esc(inter.text)}</span></div>` : ""}
+    <article class="phase">
+      <div class="phase-time"><b>${esc(p.time)}</b><span>${esc(p.code.toUpperCase())}</span></div>
+      <div class="hud ${p.key === "soiree" ? "mag" : ""}">
+        <div class="phase-top">
+          <span class="kind">${esc(p.kind)}</span>
+          <span class="chip ${p.status === "ok" ? "ok" : "wait"}">${esc(p.statusLabel)}</span>
+        </div>
+        <h3>${esc(p.title)}</h3>
+        <div class="venue"><strong>${esc(p.venue)}</strong><span>${esc(p.address)}</span></div>
+        <p class="phase-desc">${esc(p.desc)}</p>
+        <div class="phase-foot">
+          <span class="count"><b data-count="${p.key}">${state.loaded ? counts[p.key] : "--"}</b> runners inscrits</span>
+          ${maps}
+        </div>
+      </div>
+    </article>`;
+  }).join("");
+  $("#timeline").innerHTML = html;
+}
+
+/* =====================================================================
+   COMPTEURS + REGISTRE
+   ===================================================================== */
+function allMembers() { return state.groups.flatMap((g) => g.members.map((m) => ({ ...m, groupId: g.id }))); }
+function phaseCounts() {
+  const c = { total: 0 };
+  PHASES.forEach((p) => (c[p.key] = 0));
+  allMembers().forEach((m) => { c.total++; PHASES.forEach((p) => { if (m[p.key]) c[p.key]++; }); });
+  return c;
+}
+
+function renderCounts() {
+  const c = phaseCounts();
+  $("#live-count").textContent = state.loaded ? c.total : "--";
+  document.querySelectorAll("[data-count]").forEach((el) => { el.textContent = state.loaded ? c[el.dataset.count] : "--"; });
+  $("#stats").innerHTML =
+    `<div class="stat total"><small>Runners enrôlés</small><b>${state.loaded ? c.total : "--"}</b></div>` +
+    PHASES.map((p) => `<div class="stat"><small>${esc(p.short)} · ${esc(p.time)}</small><b>${state.loaded ? c[p.key] : "--"}</b></div>`).join("");
+}
+
+function renderFilters() {
+  const opts = [{ key: "all", label: "Tous" }, ...PHASES.map((p) => ({ key: p.key, label: p.short }))];
+  $("#filters").innerHTML = opts.map((o) => `<button type="button" class="filter" data-filter="${o.key}" aria-pressed="${state.filter === o.key}">${esc(o.label)}</button>`).join("");
+  $("#legend").textContent = "Légende : " + PHASES.map((p) => `${p.short.charAt(0)} = ${p.short} (${p.time})`).join(" · ");
+}
+
+function renderRegistry() {
+  const list = $("#reg-list");
+  if (!state.loaded) {
+    list.innerHTML = state.loadError
+      ? `<div class="reg-state"><span>Connexion au Réseau impossible. ${esc(state.loadError)}</span><button type="button" class="btn btn-ghost btn-sm" id="retry">Réessayer</button></div>`
+      : `<div class="reg-state">Synchronisation avec le Réseau…</div>`;
+    return;
+  }
+  const q = norm(state.query);
+  const groups = [...state.groups]
+    .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
+    .map((g) => ({ ...g, shown: g.members.filter((m) => (state.filter === "all" || m[state.filter]) && (!q || norm(displayName(m)).includes(q))) }))
+    .filter((g) => g.shown.length);
+
+  if (!state.groups.length) {
+    list.innerHTML = `<div class="reg-empty"><span>Aucun runner enrôlé pour l'instant. Sois le premier nom du registre.</span><a class="btn btn-primary btn-sm" href="#enrolement">S'enrôler</a></div>`;
+    return;
+  }
+  if (!groups.length) {
+    list.innerHTML = `<div class="reg-empty">Aucun résultat pour ce filtre.</div>`;
+    return;
+  }
+  list.innerHTML = groups.map((g) => {
+    const lead = g.members[0];
+    const label = g.members.length > 1 ? `Crew de ${lead.prenom} · ${g.members.length} pers.` : "Solo";
+    return `<div class="crew ${isMine(g.id) ? "is-mine" : ""}">
+      <div class="crew-head">
+        <span class="${isMine(g.id) ? "mine-tag" : ""}">${isMine(g.id) ? "Ton enrôlement · " : ""}${esc(label)}</span>
+        <button type="button" class="btn btn-ghost btn-sm" data-edit="${esc(g.id)}">Modifier</button>
+      </div>
+      <ul>${g.shown.map((m) => `<li><span class="name">${esc(displayName(m))}</span><span class="tags">${PHASES.map((p) => `<span class="tag ${m[p.key] ? "on" : ""}" title="${esc(p.short)}${m[p.key] ? "" : " : non"}">${esc(p.short.charAt(0))}</span>`).join("")}</span></li>`).join("")}</ul>
+    </div>`;
+  }).join("");
+}
+
+function renderMine() {
+  const box = $("#mine");
+  const mineGroups = state.groups.filter((g) => isMine(g.id));
+  if (!state.loaded || !mineGroups.length || state.editingId) { box.hidden = true; return; }
+  box.hidden = false;
+  box.innerHTML = mineGroups.map((g) => `
+    <p>Enrôlement enregistré sur cet appareil : <span>${esc(g.members.map(displayName).join(", "))}</span></p>
+    <div class="actions"><button type="button" class="btn btn-ghost btn-sm" data-edit="${esc(g.id)}">Modifier</button></div>`).join("");
+}
+
+function renderAll() { renderCounts(); renderTimeline(); renderRegistry(); renderMine(); }
+
+async function load(silent) {
+  try {
+    const groups = await api.list();
+    state.groups = Array.isArray(groups) ? groups : [];
+    state.loaded = true;
+    state.loadError = null;
+    // Oublie les inscriptions locales supprimées entre temps.
+    const ids = new Set(state.groups.map((g) => g.id));
+    state.mine.filter((id) => !ids.has(id)).forEach(forget);
+  } catch (e) {
+    if (!state.loaded) state.loadError = "Vérifie ta connexion.";
+    if (!silent) console.error(e);
+  }
+  renderAll();
+}
+
+/* =====================================================================
+   FORMULAIRE
+   ===================================================================== */
+function renderMembers() {
+  const wrap = $("#members");
+  wrap.innerHTML = state.draft.map((m, i) => `
+    <div class="member" data-i="${i}">
+      <div class="member-head">
+        <span>${i === 0 ? (state.editingId ? "Runner #1" : "Runner #1 · toi") : "Runner #" + (i + 1)}</span>
+        ${state.draft.length > 1 ? `<button type="button" class="icon-btn" data-remove="${i}">Retirer</button>` : ""}
+      </div>
+      <div class="fields">
+        <div class="field"><label for="m${i}-prenom">Prénom</label><input id="m${i}-prenom" data-i="${i}" data-k="prenom" value="${esc(m.prenom)}" autocomplete="${i === 0 ? "given-name" : "off"}" maxlength="40" required></div>
+        <div class="field"><label for="m${i}-nom">Nom</label><input id="m${i}-nom" data-i="${i}" data-k="nom" value="${esc(m.nom)}" autocomplete="${i === 0 ? "family-name" : "off"}" maxlength="40" required></div>
+      </div>
+      <fieldset class="phases-pick">
+        <legend><span>Phases</span><button type="button" data-all="${i}">${PHASES.every((p) => m[p.key]) ? "Tout décocher" : "Tout cocher"}</button></legend>
+        <div class="picks">
+          ${PHASES.map((p) => `<div class="pick"><input type="checkbox" id="m${i}-${p.key}" data-i="${i}" data-k="${p.key}" ${m[p.key] ? "checked" : ""}><label for="m${i}-${p.key}"><b>${esc(p.short)}</b><small>${esc(p.time)} · ${esc(p.kind)}</small></label></div>`).join("")}
+        </div>
+      </fieldset>
+    </div>`).join("");
+  $("#add-member").hidden = state.draft.length >= CONFIG.maxMembers;
+}
+
+function setMode() {
+  const editing = !!state.editingId;
+  const g = editing ? state.groups.find((x) => x.id === state.editingId) : null;
+  $("#form-title").textContent = editing ? "Modifier l'enrôlement" : "Nouvel enrôlement";
+  $("#form-mode").textContent = editing ? "Mise à jour" : "Création";
+  $("#submit-btn").textContent = editing ? "Mettre à jour" : "Transmettre l'enrôlement";
+  $("#cancel-edit").hidden = !editing;
+  $("#delete-btn").hidden = !editing;
+  disarmDelete();
+  const warn = $("#edit-warn");
+  if (editing && g && !isMine(g.id)) {
+    warn.hidden = false;
+    warn.textContent = `Tu modifies l'inscription de ${g.members.map(displayName).join(", ")}. Fais-le seulement si c'est la tienne ou avec leur accord.`;
+  } else warn.hidden = true;
+}
+
+function showError(msg) { const e = $("#form-err"); e.textContent = msg; e.hidden = !msg; }
+
+function startNew(keepScroll) {
+  state.editingId = null;
+  state.draft = [blankMember()];
+  $("#enrol").hidden = false;
+  $("#success").hidden = true;
+  showError("");
+  setMode(); renderMembers(); renderMine();
+  if (!keepScroll) $("#enrolement").scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
+}
+
+function startEdit(id) {
+  const g = state.groups.find((x) => x.id === id);
+  if (!g) { toast("Inscription introuvable. Recharge la page.", true); return; }
+  state.editingId = id;
+  state.draft = g.members.map((m) => ({ ...m }));
+  $("#enrol").hidden = false;
+  $("#success").hidden = true;
+  showError("");
+  setMode(); renderMembers(); renderMine();
+  $("#enrolement").scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
+  setTimeout(() => { const f = $("#m0-prenom"); if (f) f.focus({ preventScroll: true }); }, reducedMotion ? 0 : 450);
+}
+
+function validate() {
+  document.querySelectorAll(".member").forEach((el) => el.classList.remove("invalid"));
+  document.querySelectorAll(".field input").forEach((el) => el.removeAttribute("aria-invalid"));
+  const members = state.draft.map((m) => ({ ...m, prenom: m.prenom.replace(/\s+/g, " ").trim(), nom: m.nom.replace(/\s+/g, " ").trim() }));
+  for (let i = 0; i < members.length; i++) {
+    const m = members[i];
+    const who = i === 0 ? "Runner #1" : `Runner #${i + 1}`;
+    if (!m.prenom || !m.nom) {
+      const el = !m.prenom ? $(`#m${i}-prenom`) : $(`#m${i}-nom`);
+      el.setAttribute("aria-invalid", "true"); el.focus();
+      return { error: `${who} : prénom et nom obligatoires.` };
+    }
+    if (!PHASES.some((p) => m[p.key])) {
+      $(`.member[data-i="${i}"]`).classList.add("invalid");
+      return { error: `${m.prenom} : coche au moins une phase (ou retire cette personne).` };
+    }
+  }
+  // Doublons dans le formulaire
+  const seen = new Set();
+  for (const m of members) {
+    const k = norm(displayName(m));
+    if (seen.has(k)) return { error: `${displayName(m)} apparaît deux fois dans le formulaire.` };
+    seen.add(k);
+  }
+  // Doublons avec les autres inscriptions
+  for (const g of state.groups) {
+    if (g.id === state.editingId) continue;
+    for (const m of members) {
+      if (g.members.some((x) => norm(displayName(x)) === norm(displayName(m)))) {
+        return { error: `${displayName(m)} est déjà inscrit(e) dans une autre crew. Modifie plutôt cette inscription depuis le registre.`, dupGroup: g.id };
+      }
+    }
+  }
+  return { members };
+}
+
+async function submit(ev) {
+  ev.preventDefault();
+  if (state.busy) return;
+  const v = validate();
+  if (v.error) { showError(v.error); return; }
+  showError("");
+  const btn = $("#submit-btn");
+  const label = btn.textContent;
+  state.busy = true; btn.disabled = true; btn.textContent = "Transmission…";
+  try {
+    const payload = {
+      action: "save",
+      website: $("#website").value,
+      group: { id: state.editingId || undefined, members: v.members.map((m) => {
+        const o = { prenom: m.prenom, nom: m.nom };
+        PHASES.forEach((p) => (o[p.key] = !!m[p.key]));
+        return o;
+      }) }
+    };
+    const res = await api.post(payload);
+    const wasEdit = !!state.editingId;
+    state.groups = res.groups || state.groups;
+    state.loaded = true;
+    remember(res.groupId);
+    showSuccess(res.groupId, wasEdit);
+    toast(wasEdit ? "Inscription mise à jour." : "Enrôlement transmis. Bienvenue dans la crew.");
+  } catch (e) {
+    showError((e && e.message && !/fetch|network|json/i.test(e.message) ? e.message : "Transmission échouée. Vérifie ta connexion puis réessaie."));
+  } finally {
+    state.busy = false; btn.disabled = false; btn.textContent = label;
+  }
+}
+
+function showSuccess(groupId, wasEdit) {
+  const g = state.groups.find((x) => x.id === groupId);
+  state.editingId = null;
+  state.successId = groupId;
+  $("#enrol").hidden = true;
+  $("#success").hidden = false;
+  $("#success-title").textContent = wasEdit ? "Inscription mise à jour" : `Enrôlement confirmé${g ? ", " + g.members[0].prenom : ""}`;
+  $("#success-list").innerHTML = g ? g.members.map((m) => `<li>▸ ${esc(displayName(m))} : ${PHASES.filter((p) => m[p.key]).map((p) => esc(p.short)).join(" + ")}</li>`).join("") : "";
+  renderAll();
+  $("#enrol-panel").scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+}
+
+let deleteTimer = null;
+function disarmDelete() {
+  const b = $("#delete-btn");
+  b.classList.remove("armed");
+  b.textContent = "Supprimer l'inscription";
+  clearTimeout(deleteTimer);
+}
+async function onDelete() {
+  const b = $("#delete-btn");
+  if (!b.classList.contains("armed")) {
+    b.classList.add("armed");
+    b.textContent = "Confirmer la suppression";
+    deleteTimer = setTimeout(disarmDelete, 4000);
+    return;
+  }
+  clearTimeout(deleteTimer);
+  if (state.busy) return;
+  state.busy = true; b.disabled = true; b.textContent = "Suppression…";
+  try {
+    const id = state.editingId;
+    const res = await api.post({ action: "delete", groupId: id });
+    state.groups = res.groups || state.groups.filter((g) => g.id !== id);
+    forget(id);
+    toast("Inscription supprimée.");
+    startNew(true);
+    renderAll();
+  } catch (e) {
+    showError("Suppression échouée. Vérifie ta connexion puis réessaie.");
+  } finally {
+    state.busy = false; b.disabled = false; disarmDelete();
+  }
+}
+
+/* =====================================================================
+   ÉVÉNEMENTS
+   ===================================================================== */
+function bind() {
+  const members = $("#members");
+  members.addEventListener("input", (e) => {
+    const t = e.target;
+    if (t.dataset.k === "prenom" || t.dataset.k === "nom") {
+      state.draft[+t.dataset.i][t.dataset.k] = t.value;
+      t.removeAttribute("aria-invalid");
+    }
+  });
+  members.addEventListener("change", (e) => {
+    const t = e.target;
+    if (t.type === "checkbox") {
+      state.draft[+t.dataset.i][t.dataset.k] = t.checked;
+      const card = t.closest(".member");
+      card.classList.remove("invalid");
+      const m = state.draft[+t.dataset.i];
+      card.querySelector("[data-all]").textContent = PHASES.every((p) => m[p.key]) ? "Tout décocher" : "Tout cocher";
+    }
+  });
+  members.addEventListener("click", (e) => {
+    const rm = e.target.closest("[data-remove]");
+    if (rm) { state.draft.splice(+rm.dataset.remove, 1); renderMembers(); return; }
+    const all = e.target.closest("[data-all]");
+    if (all) {
+      const m = state.draft[+all.dataset.all];
+      const val = !PHASES.every((p) => m[p.key]);
+      PHASES.forEach((p) => (m[p.key] = val));
+      renderMembers();
+    }
+  });
+  $("#add-member").addEventListener("click", () => {
+    if (state.draft.length >= CONFIG.maxMembers) return;
+    state.draft.push(blankMember(state.draft[0]));
+    renderMembers();
+    const i = state.draft.length - 1;
+    const f = $(`#m${i}-prenom`);
+    if (f) { f.focus({ preventScroll: true }); f.scrollIntoView({ block: "center", behavior: reducedMotion ? "auto" : "smooth" }); }
+  });
+  $("#enrol").addEventListener("submit", submit);
+  $("#cancel-edit").addEventListener("click", () => startNew(true));
+  $("#delete-btn").addEventListener("click", onDelete);
+  $("#success-edit").addEventListener("click", () => startEdit(state.successId));
+  $("#success-new").addEventListener("click", () => startNew(true));
+
+  document.addEventListener("click", (e) => {
+    const ed = e.target.closest("[data-edit]");
+    if (ed) startEdit(ed.dataset.edit);
+    const f = e.target.closest("[data-filter]");
+    if (f) { state.filter = f.dataset.filter; renderFilters(); renderRegistry(); }
+    if (e.target.closest("#retry")) { state.loadError = null; renderRegistry(); load(); }
+  });
+  $("#reg-search").addEventListener("input", (e) => { state.query = e.target.value; renderRegistry(); });
+
+  // Rafraîchit le registre quand on revient sur l'onglet, et toutes les 60 s si visible.
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && !state.busy) load(true); });
+  setInterval(() => { if (!document.hidden && !state.busy && !state.editingId) load(true); }, 60000);
+
+  let rT; window.addEventListener("resize", () => { clearTimeout(rT); rT = setTimeout(drawSkyline, 150); });
+
+  // Bouton flottant mobile : visible hors du hero et de la section enrôlement.
+  const cta = $("#mobile-cta");
+  if ("IntersectionObserver" in window) {
+    const seen = new Map();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => seen.set(en.target, en.isIntersecting));
+      const hide = [...seen.values()].some(Boolean);
+      cta.classList.toggle("show", !hide);
+    }, { threshold: 0.05 });
+    io.observe($(".hero")); io.observe($("#enrolement"));
+  }
+}
+
+/* =====================================================================
+   DÉMARRAGE
+   ===================================================================== */
+(function init() {
+  if (DEMO) $("#demo-banner").hidden = false;
+  runBoot();
+  drawSkyline();
+  tickCountdown(); setInterval(tickCountdown, 1000);
+  renderFilters();
+  renderAll();
+  startNew(true);
+  bind();
+  load();
+})();
+</script>
+</body>
+</html>
