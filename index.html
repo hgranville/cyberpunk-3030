@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Cyberpunk 3030</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Samedi 9 janvier 2027, Paris 11e. Laser game, déjeuner, soirée bar + DJ set. Accepte le contrat.">
+<meta name="description" content="Samedi 9 janvier 2027, Paris 11e. Laser game, déjeuner, soirée bar + DJ set. Viens chromé. Accepte le contrat.">
 <meta name="theme-color" content="#0a0612">
 <meta property="og:type" content="website">
 <meta property="og:title" content="CYBERPUNK 3030 // Bigcity passe en v3.0">
-<meta property="og:description" content="Samedi 9 janvier 2027, Paris 11e. Laser game, ravitaillement, soirée bar + DJ set. Dress code obligatoire. Accepte le contrat.">
+<meta property="og:description" content="Samedi 9 janvier 2027, Paris 11e. Laser game, déjeuner, soirée bar + DJ set. Viens chromé. Accepte le contrat.">
 <meta property="og:image" content="https://hgranville.github.io/cyberpunk-3030/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -290,6 +290,11 @@ section.block { padding-block: clamp(56px, 9vw, 96px); border-bottom: 1px solid 
 .motto { font-family: var(--f-mono); font-size: .85rem; color: var(--magenta); letter-spacing: .04em; }
 .glossary { font-family: var(--f-mono); font-size: .85rem; color: var(--dim); border-left: 2px solid var(--yellow); padding: 4px 0 4px 12px; text-shadow: 0 1px 2px var(--void), 0 0 12px var(--void); }
 .transmission .sign { font-family: var(--f-mono); color: var(--magenta); }
+.transmission .quote { font-family: var(--f-head); font-weight: 700; font-size: var(--step-1); letter-spacing: .03em; color: var(--magenta); text-shadow: 0 0 12px rgba(255,42,109,0.45); }
+.hero-lede .update { display: block; margin-top: 8px; font-family: var(--f-mono); font-size: 1rem; letter-spacing: .04em; color: var(--cyan); }
+.phase-foot .foot-info { display: grid; gap: 2px; }
+.phase-foot .budget { font-family: var(--f-mono); font-size: .85rem; color: var(--dim); }
+.phase-foot .budget b { color: var(--yellow); font-weight: 400; }
 .directives { display: grid; gap: 14px; }
 .directives h3 { font-family: var(--f-mono); font-weight: 400; font-size: .8rem; letter-spacing: .16em; color: var(--yellow); text-transform: uppercase; }
 .directives ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; counter-reset: d; }
@@ -567,7 +572,7 @@ footer b { color: var(--magenta); font-weight: 400; }
         <span class="word glitch" data-text="Cyberpunk">Cyberpunk</span>
         <span class="num">3030</span>
       </h1>
-      <p class="hero-lede">Bigcity passe en <strong>version 3.0</strong>. Une journée, trois <span class="kw">runs</span>, un seul dress code : le futur.</p>
+      <p class="hero-lede">Bigcity passe en <strong>version 3.0</strong>. Une journée, trois <span class="kw">runs</span>.<span class="update">&gt; Mise à jour vers le futur en cours <span class="caret"></span></span></p>
       <dl class="hero-meta">
         <div><dt>Date</dt><dd>Samedi 9 janvier 2027</dd></div>
         <div><dt>Secteur</dt><dd>Paris 11e</dd></div>
@@ -592,20 +597,22 @@ footer b { color: var(--magenta); font-weight: 400; }
       </div>
       <div class="briefing">
         <div class="hud transmission">
-          <p class="from">DE : TON FIXER, BIGCITY // À : TOI, RUNNER // OBJET : CONTRAT</p>
-          <p class="hook">Wake up, Samurai.</p>
-          <p>Le 9 janvier 3030, je passe la barre des trente ans dans les rues de Néo-Paris. Pour marquer le coup, je recrute une équipe de <em>runners</em>, et ton nom est remonté dans mes fichiers.</p>
-          <p>Le contrat tient en trois <em>runs</em> : une chasse aux réplicants sous les lasers, un ravitaillement tous ensemble, puis l'<em>Afterlife Overdrive</em>, une nuit au bar avec DJ set jusqu'à extinction des néons.</p>
-          <p>Viens à un run, à deux ou aux trois. Mais viens <em>chromé</em>, c'est-à-dire déguisé : les corpos en chemise seront repérés.</p>
-          <p class="sign">// Fin de transmission. Ce message ne s'autodétruira pas.</p>
+          <p class="from">DE : BIGCITY, TON FIXER // À : TOI, RUNNER // OBJET : CONTRAT 3030</p>
+          <p class="hook">Runner, j'ai un job pour toi.</p>
+          <p>Le 9 janvier 3030, j'upgrade en version 3.0. Pour l'occasion, je monte un contrat de la plus haute importance dans les rues de Néo-Paris. Je recrute des <em>runners</em> fiables et expérimentés pour former une <em>unité d'élite</em>, et ton nom est remonté de la <em>Matrice</em>.</p>
+          <p>Le contrat tient en trois <em>runs</em> dans le secteur 11 : une chasse aux réplicants, un <em>gig</em> de ravitaillement, puis une descente à l'<em>Afterlife</em>, le bouquet final, si tu vois ce que je veux dire.</p>
+          <p>Viens à un run, à deux ou aux trois. Mais fais-moi honneur : viens <em>chromé</em> et prouve ta valeur de runner. Les <em>corpos</em> en chemise sont un fléau, et cette nuit marquera la fin de leur règne.</p>
+          <p>Et n'oublie pas ce que disait Keanu Reeves :</p>
+          <p class="quote">« Wake the fuck up, Samurai. We have a city to burn. »</p>
+          <p class="sign">// Fin de transmission. Bigcity.</p>
         </div>
         <div class="hud mag directives">
           <h3>Directives</h3>
           <ol>
-            <li><div><b>Accepte le <span class="kw">contrat</span> aujourd'hui.</b> <span>Les lieux se réservent sur la base des inscrits. Tu pourras modifier tes choix plus tard.</span></div></li>
-            <li><div><b>Choisis tes <span class="kw">runs</span>.</b> <span>Laser game, déjeuner, soirée : coche ceux où tu seras là.</span></div></li>
-            <li><div><b>Monte ton <span class="kw">escouade</span>.</b> <span>Ton ou ta +1, tes potes : inscris-les dans le même formulaire.</span></div></li>
-            <li><div><b>Prépare ton <span class="kw">chrome</span>.</b> <span>Ton déguisement. Le meilleur look de la journée sera récompensé.</span></div></li>
+            <li><div><b>Accepte le <span class="kw">contrat</span> dès aujourd'hui.</b> <span>Les réservations se font sur la base des inscrits. Tu pourras changer d'avis plus tard.</span></div></li>
+            <li><div><b>Choisis tes <span class="kw">runs</span>.</b> <span>Coche ceux auxquels tu penses participer.</span></div></li>
+            <li><div><b>Monte ton <span class="kw">escouade</span>.</b> <span>Avec l'accord du boss, inscris ton +1 dans le même formulaire.</span></div></li>
+            <li><div><b>Prépare ton <span class="kw">chrome</span>.</b> <span>Tes équipements et la peau que tu vas revêtir pour le contrat.</span></div></li>
           </ol>
           <a class="btn btn-primary" href="#enrolement">Accepter le contrat</a>
         </div>
@@ -619,7 +626,7 @@ footer b { color: var(--magenta); font-weight: 400; }
       <div class="sec-head">
         <p class="sec-tag">// Déroulé des opérations</p>
         <h2 id="programme-title" class="glitch" data-text="Programme" style="--gd:-2.1s">Programme</h2>
-        <p>Samedi 9 janvier 2027, trois <span class="kw">runs</span> dans le 11e : viens à un, deux ou aux trois. Chacun règle ses <span class="kw">eddies</span> (sa part) sur place.</p>
+        <p>Trois <span class="kw">runs</span>, tous dans le 11e. Rejoins-nous où tu peux, ou enchaîne les trois comme un <span class="kw">blade runner</span>. Chacun règle ses <span class="kw">eddies</span> sur place.</p>
       </div>
       <div class="timeline" id="timeline"></div>
     </div>
@@ -631,13 +638,11 @@ footer b { color: var(--magenta); font-weight: 400; }
       <div class="sec-head">
         <p class="sec-tag">// Protocole visuel</p>
         <h2 id="dress-title" class="glitch" data-text="Dress code" style="--gd:-3.4s">Dress code</h2>
-        <p>Rétro-futurisme, néons, cuir, métal et circuits imprimés. Pas besoin de budget : il faut juste jouer le jeu.</p>
-        <p class="glossary">Dans l'univers cyberpunk, le corps est une enveloppe (un <span class="kw">sleeve</span>, un <span class="kw">shell</span>) qu'on améliore à coups d'implants, le <span class="kw">chrome</span>. Ici, ton chrome, c'est ton déguisement.</p>
       </div>
       <div class="dress-intro">
         <div class="alert">
-          <h3>⚠ Déguisement fortement recommandé</h3>
-          <p>Les corpos en chemise se font repérer. Le meilleur <span class="kw">chrome</span> de la journée sera récompensé pendant la soirée, et immortalisé en <span class="kw">braindance</span> (en photo, pour les civils).</p>
+          <h3>Rétro-futurisme</h3>
+          <p>Néons, cuir, métal, circuits imprimés. Dans l'univers cyberpunk, le corps est une enveloppe (un <span class="kw">sleeve</span>, un <span class="kw">shell</span>) qu'on améliore à coups d'implants : le <span class="kw">chrome</span>. Ici, ton chrome, c'est ton déguisement.</p>
         </div>
         <div class="palette">
           <h3>Palette autorisée</h3>
@@ -681,14 +686,14 @@ footer b { color: var(--magenta); font-weight: 400; }
             <li>Implants : maquillage circuits, prothèses en carton argenté</li>
             <li>Perruque néon, lentilles, tenue holographique</li>
             <li>Gants, harnais, câbles qui dépassent</li>
-            <li>Tu clignotes dans le noir</li>
+            <li>Bonus : tu clignotes dans le noir</li>
           </ul>
         </div>
       </div>
       <div class="tips">
         <div class="tip"><b>Où trouver</b><span>Friperies, bazars, rayons déco de Noël (guirlandes LED à piles), magasins de déguisement.</span></div>
         <div class="tip"><b>Astuce</b><span>Du scotch métallisé et du carton suffisent pour un implant convaincant.</span></div>
-        <div class="tip"><b>Pense pratique</b><span>Le laser game se joue en mouvement : garde le chrome complet pour l'Afterlife si besoin.</span></div>
+        <div class="tip"><b>Pense pratique</b><span>Le laser game se joue en mouvement : prévois une tenue qui te laisse bouger, et garde le full chrome pour l'Afterlife.</span></div>
       </div>
     </div>
   </section>
@@ -699,7 +704,7 @@ footer b { color: var(--magenta); font-weight: 400; }
       <div class="sec-head">
         <p class="sec-tag">// Inscription</p>
         <h2 id="enrol-title" class="glitch" data-text="Accepter le contrat" style="--gd:-1.2s">Accepter le contrat</h2>
-        <p>Inscris-toi, ajoute ton <span class="kw">escouade</span> (les personnes qui viennent avec toi) et coche les <span class="kw">runs</span> de chacun. Modifiable à tout moment, depuis n'importe quel appareil, via le registre.</p>
+        <p>Inscris-toi, ajoute ton <span class="kw">escouade</span> et coche les <span class="kw">runs</span> de chacun. Modifiable à tout moment.</p>
       </div>
 
       <div class="enrol-grid">
@@ -748,7 +753,7 @@ footer b { color: var(--magenta); font-weight: 400; }
       <div class="sec-head">
         <p class="sec-tag">// Base de données du Réseau</p>
         <h2 id="reg-title" class="glitch" data-text="Registre des runners" style="--gd:-4.3s">Registre des runners</h2>
-        <p>Qui vient, et à quoi. Pour modifier une inscription faite sur un autre appareil, retrouve ton nom ici et touche « Modifier ».</p>
+        <p>Qui vient, et à quoi. Pour modifier ton inscription depuis un autre appareil, retrouve ton nom ici et clique sur « Modifier ».</p>
       </div>
       <div class="stats" id="stats"></div>
       <div class="reg-tools">
@@ -774,32 +779,36 @@ footer b { color: var(--magenta); font-weight: 400; }
       </div>
       <div class="faq">
         <details>
-          <summary>Pilule rouge ou pilule bleue : je dois venir à toute la journée ?</summary>
-          <div class="ans"><p>Non. Choisis les <span class="kw">runs</span> qui t'arrangent : laser game, déjeuner, soirée, ou n'importe quelle combinaison. Coche simplement les bonnes cases.</p></div>
+          <summary>Je dois venir à toute la journée ?</summary>
+          <div class="ans"><p>Non. Choisis les <span class="kw">runs</span> qui te tentent : laser game, déjeuner, soirée, ou n'importe quelle combinaison.</p></div>
         </details>
         <details>
           <summary>Combien ça coûte ?</summary>
-          <div class="ans"><p>Chacun règle ses <span class="kw">eddies</span> (sa part) sur place : laser game, repas, consos. Ton <span class="kw">fixer</span> prend en charge une partie, notamment au bar le soir.</p></div>
+          <div class="ans"><p>Chacun règle ses <span class="kw">eddies</span> sur place : environ 25 € pour le laser game, 30 à 40 € pour le déjeuner, et tes consos à l'Afterlife. Ton <span class="kw">fixer</span> s'occupe de la bouffe, et c'est happy hour jusqu'à 21h.</p></div>
         </details>
         <details>
           <summary>Je peux venir accompagné(e) ?</summary>
-          <div class="ans"><p>Oui, monte ton <span class="kw">escouade</span> : dans le formulaire, touche <b>« Ajouter un membre à mon escouade »</b> et coche ses runs. Chaque personne compte pour les réservations.</p></div>
+          <div class="ans"><p>Oui, avec l'accord du boss : préviens ton <span class="kw">fixer</span>, puis clique sur <b>« Ajouter un membre à mon escouade »</b> dans le formulaire et coche ses runs.</p></div>
         </details>
         <details>
-          <summary>Je ne suis pas encore sûr(e), je m'inscris quand même ?</summary>
-          <div class="ans"><p>Oui, accepte le contrat le plus tôt possible : les réservations se font sur la base des inscrits. Coche ce qui est probable aujourd'hui, tu pourras décocher plus tard.</p></div>
+          <summary>Pilule rouge ou pilule bleue ? Je ne suis pas encore sûr(e) de venir.</summary>
+          <div class="ans"><p>Prends la rouge : inscris-toi maintenant avec ce qui est probable. Les réservations se font sur la base des inscrits, et tu pourras décocher plus tard.</p></div>
         </details>
         <details>
           <summary>Comment modifier ou annuler mon inscription ?</summary>
-          <div class="ans"><p>Sur l'appareil qui a servi à t'inscrire, un encadré vert en haut du formulaire te propose de modifier. Sinon, retrouve ton nom dans le <a href="#registre">registre</a> et touche <b>« Modifier »</b>. Tu peux cocher, décocher, ajouter ou retirer quelqu'un, ou supprimer l'inscription.</p></div>
+          <div class="ans"><p>Sur l'appareil qui t'a servi à t'inscrire, ton inscription s'affiche juste au-dessus du formulaire. Sinon, retrouve ton nom dans le <a href="#registre">registre</a> et clique sur <b>« Modifier »</b>. Tu peux cocher, décocher, ajouter ou retirer quelqu'un, ou tout annuler.</p></div>
         </details>
         <details>
           <summary>Le déguisement est obligatoire ?</summary>
-          <div class="ans"><p>Fortement recommandé. Même un seul accessoire lumineux suffit pour passer du côté des runners. Regarde le <a href="#dresscode">dress code</a> pour des idées à tous les niveaux d'effort.</p></div>
+          <div class="ans"><p>Fortement recommandé. Même un seul accessoire lumineux suffit. Le <a href="#dresscode">dress code</a> propose des idées pour tous les niveaux d'effort.</p></div>
         </details>
         <details>
           <summary>Il y a une pause entre le déjeuner et la soirée ?</summary>
-          <div class="ans"><p>Oui, l'après-midi est libre entre la fin du déjeuner et 19h : idéal pour finaliser ton <span class="kw">chrome</span>.</p></div>
+          <div class="ans"><p>Oui, l'après-midi est libre entre la fin du déjeuner et 19h : repos physique, recharge mentale et finitions du <span class="kw">chrome</span>.</p></div>
+        </details>
+        <details>
+          <summary>Je peux arriver en cours de route ?</summary>
+          <div class="ans"><p>Oui, rejoins-nous directement au lieu du run suivant. Horaires et adresses sont dans le <a href="#programme">programme</a>.</p></div>
         </details>
         <details>
           <summary>J'ai une autre question</summary>
@@ -845,7 +854,8 @@ const CONFIG = {
       status: "ok",              // "ok" = lieu confirmé, "wait" = à confirmer
       statusLabel: "Lieu confirmé",
       // [[mot]] = mot-clé surligné en jaune
-      desc: "Briefing tactique, équipes tirées au sort, et que les [[réplicants]] se tiennent prêts. Arrive à l'heure : les parties s'enchaînent."
+      budget: "~25 €",
+      desc: "Des [[réplicants]] ont infiltré le secteur 11. Tirage au sort des bataillons, briefing tactique, et que la chasse commence. Arrive à l'heure : les traques s'enchaînent."
     },
     {
       key: "dejeuner",
@@ -853,12 +863,13 @@ const CONFIG = {
       time: "14:00",
       short: "Déjeuner",
       title: "Ravitaillement",
-      kind: "Déjeuner au resto",
+      kind: "Déjeuner en brasserie",
       venue: "Lieu en cours de sélection",
       address: "Coordonnées transmises très bientôt",
       status: "wait",
       statusLabel: "À confirmer",
-      desc: "On recharge les batteries tous ensemble après la chasse. Le lieu sera annoncé ici dès qu'il est réservé."
+      budget: "30 à 40 €",
+      desc: "On infiltre un point stratégique pour voler des provisions et se partager le [[butin]]. De quoi recharger les batteries après la chasse. Le lieu sera transmis ici sous peu."
     },
     {
       key: "soiree",
@@ -871,11 +882,12 @@ const CONFIG = {
       address: "13 rue Marguerite Moret, 75011 Paris",
       status: "ok",
       statusLabel: "Lieu confirmé",
-      desc: "Néons, DJ set et tournées jusqu'à extinction des feux. Ton [[fixer]] arrose une partie des consos. Remise du prix du meilleur [[chrome]]."
+      budget: "∞",
+      desc: "Le moment que tout le monde attend : la descente à l'[[Afterlife]], le berceau de la pègre. Happy hour jusqu'à 21h, et ton [[fixer]] s'occupe de la bouffe. Complots au coin du bar, cocktails explosifs et DJ set électrique. Les [[corpos]] ne s'en remettront pas."
     }
   ],
 
-  interludes: { soiree: { time: "16:00", text: "Temps libre // recharge, finitions du chrome" } },
+  interludes: { soiree: { time: "16:00", text: "Temps libre // repos physique, recharge mentale et finitions du chrome" } },
 
   maxMembers: 10
 };
@@ -996,10 +1008,11 @@ function runBoot() {
   if (reducedMotion) { boot.hidden = true; document.body.classList.add("ready"); return; }
   const lines = [
     "> NEO-PARIS NET // NŒUD 75011",
-    "> Jack-in via lien direct................ OK",
-    "> Décryptage du contrat.................. OK",
-    "> Profil détecté : RUNNER POTENTIEL",
-    "> Chargement de la mission CYBERPUNK 3030",
+    "> Jack-in via lien direct......... OK",
+    "> Décryptage du contrat........... OK",
+    "> Scan biométrique................ OK",
+    "> Profil détecté : RUNNER",
+    "> Chargement : CYBERPUNK 3030",
     "",
     "ACCÈS AUTORISÉ"
   ];
@@ -1099,7 +1112,10 @@ function renderTimeline() {
         <div class="venue"><strong>${esc(p.venue)}</strong><span>${esc(p.address)}</span></div>
         <p class="phase-desc">${kw(p.desc)}</p>
         <div class="phase-foot">
-          <span class="count"><b data-count="${p.key}">${state.loaded ? counts[p.key] : "--"}</b> runners inscrits</span>
+          <div class="foot-info">
+            <span class="count"><b data-count="${p.key}">${state.loaded ? counts[p.key] : "--"}</b> runners inscrits</span>
+            ${p.budget ? `<span class="budget">Budget : <b>${esc(p.budget)}</b></span>` : ""}
+          </div>
           ${maps}
         </div>
       </div>
@@ -1134,9 +1150,9 @@ function renderFilters() {
   $("#legend").textContent = "Légende : " + PHASES.map((p) => `${p.short.charAt(0)} = ${p.short} (${p.time})`).join(" · ");
 }
 
-// Rang d'un runner seul selon le nombre de runs cochés : 1 Runner, 2 NetRunner, 3 Edgerunner.
-const RANKS = ["Runner", "Runner", "NetRunner", "Edgerunner"];
-function soloRank(m) { return RANKS[PHASES.filter((p) => m[p.key]).length] || "Runner"; }
+// Rang d'un runner seul selon le nombre de runs cochés : 1 Netrunner, 2 Edgerunner, 3 Blade Runner.
+const RANKS = ["Netrunner", "Netrunner", "Edgerunner", "Blade Runner"];
+function soloRank(m) { return RANKS[PHASES.filter((p) => m[p.key]).length] || "Netrunner"; }
 
 function renderRegistry() {
   const list = $("#reg-list");
