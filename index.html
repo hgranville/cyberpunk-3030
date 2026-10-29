@@ -1476,6 +1476,10 @@ function bind() {
    DÉMARRAGE
    ===================================================================== */
 (function init() {
+  // Au rechargement : toujours repartir du haut de page (pas de position mémorisée, pas d'ancre).
+  try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
+  if (location.hash) { try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {} }
+  window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   if (DEMO) $("#demo-banner").hidden = false;
   runBoot();
   drawSkyline();
