@@ -214,7 +214,7 @@ p { margin: 0; }
 .hero-lede { margin-top: 22px; max-width: 34ch; font-size: var(--step-1); line-height: 1.4; color: var(--text); }
 .hero-lede strong { color: var(--yellow); font-weight: 600; }
 .hero-meta {
-  margin: 22px 0 0; display: grid; grid-template-columns: repeat(3, auto); width: max-content; max-width: 100%; gap: 0;
+  margin: 22px 0 0; display: grid; grid-template-columns: repeat(2, auto); width: max-content; max-width: 100%; gap: 0;
   background: rgba(10,6,18,0.85); border: 1px solid var(--line); border-left: 2px solid var(--magenta);
   backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
 }
@@ -287,6 +287,24 @@ section.block { padding-block: clamp(56px, 9vw, 96px); border-bottom: 1px solid 
 .motto { font-family: var(--f-mono); font-size: .85rem; color: var(--magenta); letter-spacing: .04em; }
 .glossary { font-family: var(--f-mono); font-size: .85rem; color: var(--dim); border-left: 2px solid var(--yellow); padding: 4px 0 4px 12px; text-shadow: 0 1px 2px var(--void), 0 0 12px var(--void); }
 .transmission .sign { font-family: var(--f-mono); color: var(--magenta); }
+.transmission { position: relative; }
+/* Briefing chiffré : texte brouillé + bouton de décryptage */
+.transmission.is-encrypted em, .transmission.is-encrypted .kw { color: inherit; }
+.transmission.is-encrypted > p:not(.from) { color: var(--dim); opacity: .55; filter: blur(.4px); user-select: none; }
+.transmission .dc-rest { color: var(--dim); opacity: .55; }
+.transmission .dc-tail { color: var(--cyan); text-shadow: 0 0 8px rgba(5,217,232,0.8); }
+.decrypt-gate {
+  position: absolute; inset: 0; z-index: 2;
+  display: grid; place-content: center; justify-items: center; gap: 14px; padding: 24px; text-align: center;
+  background: radial-gradient(ellipse at center, rgba(10,6,18,0.92) 0%, rgba(10,6,18,0.6) 55%, rgba(10,6,18,0) 100%);
+  transition: opacity .35s ease, visibility .35s;
+}
+.decrypt-gate.gone { opacity: 0; visibility: hidden; }
+.decrypt-gate p { font-family: var(--f-mono); font-size: .8rem; letter-spacing: .16em; text-transform: uppercase; color: var(--cyan); }
+.decrypt-gate p::before { content: "■ "; color: var(--magenta); animation: blink 1s steps(1) infinite; }
+.decrypt-gate .btn { box-shadow: 0 0 24px rgba(249,240,2,0.25); }
+.decrypt-status { font-family: var(--f-mono); font-size: .8rem; line-height: 1.5; letter-spacing: .1em; color: var(--cyan); min-height: 1.5em; }
+.decrypt-status.done { color: var(--ok); }
 .transmission .quote { font-family: var(--f-head); font-weight: 700; font-size: var(--step-1); letter-spacing: .03em; color: var(--magenta); text-shadow: 0 0 12px rgba(255,42,109,0.45); }
 .hero-lede .update { display: block; margin-top: 8px; font-family: var(--f-mono); font-size: 1rem; letter-spacing: .04em; color: var(--cyan); }
 .phase-foot .foot-info { display: grid; gap: 2px; }
@@ -573,7 +591,6 @@ footer b { color: var(--magenta); font-weight: 400; }
       <dl class="hero-meta">
         <div><dt>Date</dt><dd>Samedi 9 janvier 2027</dd></div>
         <div><dt>Secteur</dt><dd>Paris 11e</dd></div>
-        <div><dt>Horaires</dt><dd>De 11h à tard</dd></div>
       </dl>
       <div class="countdown" id="countdown" aria-label="Compte à rebours avant le début de la mission">
         <div class="cd-cell"><b id="cd-d">--</b><small>jours</small></div>
@@ -1036,6 +1053,110 @@ function runBoot() {
 }
 
 /* =====================================================================
+   BRIEFING : transmission chiffrée, décryptée au clic
+   ===================================================================== */
+function setupDecrypt() {
+  const panel = $(".transmission");
+  if (!panel || reducedMotion) return;
+  const paras = [...panel.querySelectorAll(":scope > p:not(.from)")];
+  // Glyphes tirés des lettres du message lui-même (même fréquence, donc même largeur moyenne), plus quelques symboles.
+  const src = paras.map((p) => p.textContent).join("");
+  const LOWER = (src.match(/[a-z]/g) || []).join("") + "#/<>";
+  const UPPER = (src.match(/[A-Z]/g) || []).join("") + "XZK";
+  const DIGIT = "0123456789";
+  const pick = (set) => set[(Math.random() * set.length) | 0];
+  // Brouille chaque caractère avec un glyphe de même famille (minuscule, majuscule, chiffre)
+  // pour garder une largeur proche et éviter que le bloc change de hauteur.
+  const scramble = (t) => t.replace(/[a-zà-ÿ]/g, () => pick(LOWER)).replace(/[A-ZÀ-Þ]/g, () => pick(UPPER)).replace(/[0-9]/g, () => pick(DIGIT));
+
+  // Chaque texte devient : [décodé][traîne lumineuse][reste chiffré]
+  const parts = [];
+  // Hauteur figée pendant le chiffrement : le texte brouillé ne fait pas sauter la mise en page.
+  const heights = paras.map((p) => p.offsetHeight);
+  paras.forEach((p, i) => { p.style.height = heights[i] + "px"; p.style.overflow = "hidden"; });
+  paras.forEach((p) => {
+    const walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach((node) => {
+      const text = node.nodeValue;
+      if (!text.trim()) return;
+      const wrap = document.createElement("span");
+      const done = document.createTextNode("");
+      const tail = document.createElement("span"); tail.className = "dc-tail";
+      const rest = document.createElement("span"); rest.className = "dc-rest";
+      rest.textContent = scramble(text);
+      wrap.append(done, tail, rest);
+      node.replaceWith(wrap);
+      parts.push({ text, wrap, done, tail, rest });
+    });
+    p.setAttribute("aria-hidden", "true");
+  });
+  panel.classList.add("is-encrypted");
+
+  const gate = document.createElement("div");
+  gate.className = "decrypt-gate";
+  gate.innerHTML = '<p>Message chiffré reçu</p><button type="button" class="btn btn-primary" id="decrypt-btn">Décrypter la transmission</button>';
+  panel.appendChild(gate);
+  const status = document.createElement("p");
+  status.className = "decrypt-status";
+  status.setAttribute("aria-live", "polite");
+  panel.querySelector(".from").after(status);
+
+  // Le texte chiffré « grésille » tant qu'il n'est pas décodé.
+  let flicker = setInterval(() => parts.forEach((o) => { o.rest.textContent = scramble(o.text); }), 140);
+
+  const total = parts.reduce((a, o) => a + o.text.length, 0);
+  const TAIL = 5;
+  let pos = 0, raf = 0, running = false;
+
+  const render = () => {
+    let offset = 0;
+    parts.forEach((o) => {
+      const len = o.text.length;
+      const local = Math.max(0, Math.min(len, pos - offset));
+      const tailEnd = Math.min(len, local + (local > 0 || pos > offset ? TAIL : 0));
+      o.done.nodeValue = o.text.slice(0, local);
+      o.tail.textContent = local < len && pos >= offset ? scramble(o.text.slice(local, tailEnd)) : "";
+      o.rest.textContent = scramble(o.text.slice(o.tail.textContent ? tailEnd : local));
+      offset += len;
+    });
+    status.textContent = `> Décryptage en cours… ${Math.min(100, Math.round((pos / total) * 100))} %`;
+  };
+
+  const finish = () => {
+    cancelAnimationFrame(raf);
+    clearInterval(flicker);
+    running = false;
+    parts.forEach((o) => o.wrap.replaceWith(document.createTextNode(o.text)));
+    paras.forEach((p) => { p.removeAttribute("aria-hidden"); p.style.height = ""; p.style.overflow = ""; });
+    panel.classList.remove("is-encrypted");
+    status.textContent = "> Transmission décryptée.";
+    status.classList.add("done");
+    panel.removeEventListener("click", skip);
+  };
+  // Un clic pendant le décodage affiche tout d'un coup.
+  const skip = (e) => { if (running && !e.target.closest("#decrypt-btn")) finish(); };
+
+  const step = () => {
+    pos += Math.max(2, Math.ceil(total / 260)); // ~4,5 s quelle que soit la longueur du texte
+    if (pos >= total + TAIL) { finish(); return; }
+    render();
+    raf = requestAnimationFrame(step);
+  };
+
+  $("#decrypt-btn").addEventListener("click", () => {
+    gate.classList.add("gone");
+    setTimeout(() => gate.remove(), 400);
+    clearInterval(flicker);
+    panel.classList.remove("is-encrypted");
+    running = true;
+    panel.addEventListener("click", skip);
+    step();
+  });
+}
+
+/* =====================================================================
    HERO : skyline + compte à rebours
    ===================================================================== */
 function drawSkyline() {
@@ -1484,6 +1605,8 @@ function bind() {
   renderFilters();
   renderAll();
   startNew(true);
+  // Chiffrement après chargement des polices (mesure des hauteurs fiable) ; l'écran de boot masque l'attente.
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(setupDecrypt).catch(setupDecrypt);
   bind();
   load();
 })();
