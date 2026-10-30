@@ -262,7 +262,7 @@ function setup() {
   recap.getRange('A3:B9').setValues([
     ['Activité', 'Inscrits'],
     ['Laser game (11h)', '=SUMPRODUCT(--Inscriptions!E2:E)'],
-    ['Déjeuner (14h)', '=SUMPRODUCT(--Inscriptions!F2:F)'],
+    ['Déjeuner (13h30)', '=SUMPRODUCT(--Inscriptions!F2:F)'],
     ['Soirée bar + DJ (19h)', '=SUMPRODUCT(--Inscriptions!G2:G)'],
     ['', ''],
     ['Personnes inscrites', '=COUNTA(Inscriptions!B2:B)'],
